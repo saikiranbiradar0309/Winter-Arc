@@ -1,0 +1,234 @@
+01. implicit_wait()
+    - implicit_wait() is a type of wait in Selenium that tells the WebDriver to wait for a specified 
+      amount of time while trying to locate an element on a webpage.
+    
+    - For example, suppose you are automating a login page. Sometimes the username textbox takes 3 sec 
+      to appear because the page is loading.
+    
+    - Without a wait, Selenium may throw a "NoSuchElementException" if it tries to find the textbox 
+      before it appears.
+    
+    - With an implicit_wait(), selenium keeps trying to locate the element until:
+      a. The element is found, or
+      b. The specified timeout is reached 
+    
+
+a. Syntax of implicit_wait()
+   
+   driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+
+   First, import Duration:
+   import java.time.Duration;
+
+
+
+b. How to Call Implicit Wait
+   
+   - You usually declare implicit wait immediately after initializing the WebDriver, so it applies to 
+     subsequent element searches throughout the session.
+
+
+     import java.time.Duration;
+     import org.openqa.selenium.WebDriver;
+     import org.openqa.selenium.chrome.ChromeDriver;
+
+     public class ImplicitWaitExample {
+
+        public static void main(String[] args) {
+
+                WebDriver driver = new ChromeDriver();
+
+                // Apply implicit wait
+                driver.manage().timeouts()
+                    .implicitlyWait(Duration.ofSeconds(10));
+
+                driver.get("https://www.saucedemo.com/");
+
+                driver.findElement(By.id("user-name"))
+                    .sendKeys("standard_user");
+
+                driver.findElement(By.id("password"))
+                    .sendKeys("secret_sauce");
+
+                driver.findElement(By.id("login-button"))
+                    .click();
+
+                driver.quit();
+        }
+     }
+
+
+
+c. What happens here?
+   i.  Selenium launches Chrome 
+   ii. Implicit wait is set to 10 seconds.
+   iii.Selenium opens the SauceDemo website.
+   iv. When Selenium searches for the username textbox, it waits up to 10 seconds for it to be located.
+   v.  Once located, Selenium enters the username without waiting for the full 10 seconds.
+   vi. The same implicit wait applies to subsequent element searches.
+   
+   
+
+
+d. When to Use Implicit Wait
+   - Your application has elements that take a little time to load.
+   - You want a general wait for element-location operations.
+   - You want to avoid adding separate fixed delays to every findElement() call.
+   - Your application has relatively consistent loading behaviour.
+
+
+
+e. Limitations of Implicit Wait
+   - Implicit wait only waits for an element to be located in the DOM. It does not guarantee that the 
+     element is visible, enabled or clickable.
+   
+   - For example:
+     driver.findElement(By.id("login")).click();
+
+   - Even if the element is found, the click might fail if it is hidden, disabled or obstructed.
+
+   - For such scenarios, Selenium provides Explicit Wait, which can wait for specific conditions such as 
+     visibility or clickability.
+
+
+
+==========================================================================================
+
+
+02. explicit_wait()
+    - explicit_wait() is a type of wait in selenium that waits for a specific condition to be satisfied
+      before proceeding to the next step. 
+    
+    - For example, suppose you are automating a login page. You click the Login button, and the application 
+      takes 5 seconds to load the dashboard.
+    
+    - If Selenium tries to interact with the dashboard before it is ready, the test may fail.
+
+    - Using Explicit Wait, you can tell Selenium:
+      "Wait until the dashboard is visible, for a maximum of 10 seconds, and then continue."
+    
+    - Unlike Implicit Wait, Explicit Wait allows you to wait for specific conditions, such as:
+      a. Element is visible.
+      b. Element is clickable.
+      c. Element is present in the DOM.
+      d. Element's text is visible.
+      e. An alert is present.
+
+
+
+a. Syntax of Explicit Wait
+   
+   WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+
+   wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("")));
+
+
+
+
+b. Common Explicit Wait Conditions
+   i.   visibilityOfElementLocated()
+        - Waits until an element is present and visible
+   
+   ii.  presenceOfElementLocated()
+        - Waits until an element exists in the DOM
+   
+   iii. elementToBeClickable()
+        - Waits until an element is visible and enabled
+   
+   iv.  invisibilityOfElementLocated()
+        - Waits until an element is invisible or absent
+   
+   v.   textToBePresentInElementLocated()
+        - Waits until an element contains specific text
+   
+   vi.  alertIsPresent()
+        - Waits until a JavaScript alert appears
+   
+   vii. titleContains()
+        - Waits until the page title contains specific text
+   
+   viii. urlContains()
+         - Waits until the URL contains specific text
+
+   ix.  stalenessOf()
+        - Waits until an element is no longer attached to the DOM 
+
+
+
+c. When to Use Explicit Wait
+   - AJAX calls: When data loads asynchronously without refreshing the entire page.
+   - Login workflows: When the dashboard appears after authentication.
+   - Dynamic buttons: When buttons become enabled after completing a form.
+   - Loading spinners: When you need to wait for a loader to disappear.
+   - Dynamic tables: When rows are loaded from an API.
+   - Alerts and popups: When they appear in response to a user action.
+
+==========================================================================================
+
+
+
+03. FluentWait
+    - Fluent Wait is a type of wait in Selenium that allows you to define the maximum waiting time, 
+      the frequency at which Selenium checks for a condition, and which exceptions should be ignored 
+      while waiting.
+    
+    - In simple terms, Fluent Wait tells Selenium:
+      "Wait up to 30 seconds for an element to appear. Check every 2 seconds, and ignore NoSuchElementException 
+      while waiting."
+    
+    - Fluent Wait is particularly useful when working with dynamic web applications where elements may appear 
+      at unpredictable times.
+
+
+
+a. Syntax of Fluent Wait
+   
+   Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+        .withTimeout(Duration.ofSeconds(30))        // Selenium will wait for a maximum of 30 seconds.
+        .pollingEvery(Duration.ofSeconds(2))        // Selenium checks the condition approximately every 2 seconds.
+        .ignoreing(NoSuchElementException.class);   // If the element is not found during a check, Selenium retries instead of immediately failing.
+
+
+
+b. Understanding Polling Interval
+   - Polling interval is one of the most important features of Fluent Wait. 
+
+   - Suppose you configure:
+     .pollingEvery(Duration.ofSeconds(2))
+
+   - This means Selenium checks the condition at intervals of approximately 2 seconds while waiting.
+
+
+
+c. Fluent Wait with ExpectedConditions
+   - You can also use Selenium's built-in ExpectedConditions with Fluent Wait instead of writing a custom lambda.
+
+
+   Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+        .withTimeout(Duration.ofSeconds(30))
+        .pollingEvery(Duration.ofSeconds(2))
+        .ignoring(NoSuchElementException.class);
+
+   WebElement username = wait.until(
+        ExpectedConditions.visibilityOfElementLocated(
+            By.id("user-name")
+        )
+    );
+
+    username.sendKeys("standard_user");
+
+
+
+d. When to Use Fluent Wait
+   - Dynamic web elements: Elements appear at unpredictable times.
+   - AJAX applications: Data is loaded asynchronously.
+   - Polling requirements: You need to control how frequently Selenium checks a condition.
+   - Intermittent exceptions: You need to ignore certain exceptions during repeated checks.
+   - Slow-loading applications: You need a custom timeout and polling interval.
+
+
+- For example, in an enterprise application, a report might take different amounts of time to generate. 
+  Fluent Wait allows you to keep checking for the report's download button at a defined interval until it 
+  becomes available or the timeout expires.

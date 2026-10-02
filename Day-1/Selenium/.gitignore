@@ -1,0 +1,35 @@
+
+# Java compiled files
+*.class
+
+# Maven build files
+target/
+
+# Eclipse IDE
+.metadata/
+.settings/
+
+# Eclipse workspace files (optional)
+# .project
+# .classpath
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Log files
+*.log
+
+# macOS system files
+.DS_Store
+
+# Temporary files
+*.tmp
+*.bak
+
+# Test reports
+surefire-reports/
+

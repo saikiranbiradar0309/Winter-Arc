@@ -1,0 +1,203 @@
+01. Control Statements in Java
+    
+    - Control statements are used to control the flow of execution of a Java program.
+    - They determine which statements execute, how many times they execute, and when execution 
+      should stop or skip.
+
+********************************************************************************
+=================================================================================
+
+
+Decision-Making Statements 
+
+
+A. if Statement 
+   
+   - The if Statement executes a block of code only when the condition is true.
+
+   - Syntax 
+     
+     if (condition) {
+        // Code 
+     }
+   
+   - Example 
+     
+     public class Main {
+
+        public static void main(String[] args) {
+            int statusCode = 200;
+
+            if (statusCode == 200) {
+                System.out.println("API is Successful");
+            }
+        }
+     }
+   
+
+   - Output:    API is Successful
+
+
+   - Selenium Example: 
+
+     if(driver.findElement(By.id("logout")).isDisplayed()) {
+        System.out.println("User is logged in");
+     }
+
+
+     This checks whether the logout element is displayed. 
+
+     Note that isDisplayed() can throw an exception if the element cannot be located.
+
+     use an appropriate wait ot exception handling where needed.
+
+
+
+------------------------------------------------------------------------------
+
+
+B. if-else Statement 
+   
+   - The if-else statement executes one block if the condition is true and another block 
+     if it is false.
+   
+   - Syntax 
+     
+     if(condition) {
+        // Executes if true 
+     }
+     else {
+        // Executes if false 
+     }
+   
+
+   - Example 
+
+     public class Main {
+        public static void main(String[] args) {
+            int statusCode = 404;
+
+            if (statusCode == 200) {
+                System.out.println("API test passed");
+            }
+            else {
+                System.out.println("API test failed");
+            }
+        }
+     }
+
+
+
+------------------------------------------------------------------------------
+
+
+C. if-else-if Ladder
+
+   - Use an if-else-if ladder when you need to check multiple conditions.
+
+
+public class Main {
+    public static void main(String[] args) {
+        int statusCode = 201;
+
+        if (statusCode == 200) {
+            System.out.println("OK");
+        } else if (statusCode == 201) {
+            System.out.println("Created");
+        } else if (statusCode == 404) {
+            System.out.println("Not Found");
+        } else {
+            System.out.println("Unexpected status");
+        }
+    }
+}
+
+
+   
+   - Java checks the conditions from top to bottom. Once it finds a true condition, it 
+     executes that block and skips the remaining branches.
+
+
+------------------------------------------------------------------------------
+
+
+D. Nested if Statement
+   - A nested if means writing one if statement inside another if statement.
+
+
+public class Main {
+    public static void main(String[] args) {
+        String username = "admin";
+        String password = "admin123";
+
+        if (username.equals("admin")) {
+            if (password.equals("admin123")) {
+                System.out.println("Login successful");
+            } else {
+                System.out.println("Invalid password");
+            }
+        } else {
+            System.out.println("Invalid username");
+        }
+    }
+}
+
+
+   - The inner if is checked only when the outer if condition is true.
+
+   - Testing example: You might first check whether a login page is loaded and then check 
+     whether the login button is enabled.
+
+
+
+------------------------------------------------------------------------------
+
+
+E. switch Statement 
+   
+   - The switch statement is used when a variable or expression is compared against multiple fixed values.
+
+
+switch (expression) {
+    case value1:
+        // Code
+        break;
+
+    case value2:
+        // Code
+        break;
+
+    default:
+        // Default code
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        int statusCode = 404;
+
+        switch (statusCode) {
+            case 200:
+                System.out.println("OK");
+                break;
+
+            case 201:
+                System.out.println("Created");
+                break;
+
+            case 404:
+                System.out.println("Not Found");
+                break;
+
+            default:
+                System.out.println("Unknown status");
+        }
+    }
+}
+
+
+- Important points:
+  a. case defines a value to match.
+  b. break exits the switch block, preventing execution from falling through to the next case.
+  c. default executes if no case matches.
+  d. - default is optional.

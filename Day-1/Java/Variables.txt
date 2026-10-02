@@ -1,0 +1,230 @@
+01. Variables
+    - A variable is a named memory location used to store data that can be accessed and,
+      in many cases, modified during program execution.
+    
+    - For Example:
+      int age = 28;
+
+      Here:
+        a. int --> data type
+        b. age --> Variable name 
+        c. =   --> Assignment Operator
+        d. 29  --> Value 
+    
+
+    - For Example, in software testing
+      
+      int expectedStatusCode = 200;
+      int actualStatusCode = 200;
+
+      System.out.println(expectedStatusCode == actualStatusCode)
+
+
+      output:   true 
+    
+
+    - Instead of hardcoding values repeatedly, variables let you store, reuse 
+      compare and update data.
+
+
+
+
+==============================================================================
+
+
+
+02. Why do Software Test Engineers need variables?
+
+    - Imagine you are automating a login page using selenium
+
+    - Without variables:
+      
+      driver.findElement(By.id("username")).sendKeys("admin");
+      driver.findElement(By.id("password")).sendKeys("Admin@123");
+
+    
+    - With Variables
+      
+      String username = "admin";
+      String password = "Admin@123";
+
+      driver.findElement(By.id("username")).sendKeys(username);
+      driver.findElement(By.id("password")).sendKeys("password");
+
+
+
+
+==============================================================================
+
+
+03. How to declare and initialize variables
+   
+    - There are 3 common ways to work with variables 
+
+    a. Declaration
+       
+       int age;
+
+       You declare a variable but dont assign a value yet 
+    
+
+
+    b. Initialization
+       
+       age = 28;
+
+       You assign a value to the already declared variable
+    
+
+
+    c. Declaration and Initialization together 
+       
+       int age = 28; 
+
+
+
+
+==============================================================================
+
+
+
+04. Types of Variables in Java 
+
+    a. Local Variables 
+       
+       - Declare inside a method, constructor or block.
+       - They can be used within that scope 
+
+       - Example 
+         
+         void loginTest() {
+            String username = "admin";
+            System.out.println(username);
+         }
+       
+       - In automation, test-specific input values and intermediate results are often 
+         local variables
+    
+
+
+    b. Instance Variables 
+       
+       - Declared inside a class but outside methods, without static.
+       - Each object has its own copy 
+
+       - Example 
+
+         class LoginPage {
+            String username;
+            String password;
+         }
+       
+       - In a page object model, instance variables are commonly used to store page 
+         elements or object-specific state 
+    
+
+
+    c. Static variables
+       
+       - Declared using static inside a class 
+       - There is one class-level copy shared by its instance
+
+       - Example
+         
+         class TestConfig {
+            static String browser = "Chrome";
+         }
+
+
+
+==============================================================================
+
+
+05. variable scope 
+
+    - Scope defines where the variable can be accessed
+
+
+public class VariableDemo {
+
+    int instanceValue = 100;
+
+    static int staticValue = 200;
+
+    public void display() {
+
+        int localValue = 300;
+
+        System.out.println(instanceValue);
+        System.out.println(staticValue);
+        System.out.println(localValue);
+    }
+
+    public void anotherMethod() {
+
+        System.out.println(instanceValue);
+        System.out.println(staticValue);
+
+        // localValue is not accessible here
+    }
+}
+
+
+    - instanceValue can be accessed through an instance of the class.
+
+    - staticValue belongs to the class.
+
+    - localValue is accessible only inside display().
+
+
+    - Note: Local variables must be initialized before they are read. Instance and static 
+      variables receive default values if you don't explicitly initialize them.
+
+
+
+==============================================================================
+
+
+06. Updating variable values
+
+    - A variable can be reassigned if it is not declared final 
+
+
+int retryCount = 1;
+
+retryCount = 2;
+
+retryCount = retryCount + 1;
+
+System.out.println(retryCount);
+
+
+output:     3
+
+
+
+==============================================================================
+
+
+07. Constants using final 
+
+    - Sometimes you dont want a variable's value to change 
+
+    - Use final keyword. 
+
+      final int TIMEOUT = 30;
+    
+    - The value cannot be reassigned.
+
+    - For Example
+
+
+final String BASE_URL = "https://example.com";
+
+System.out.println(BASE_URL);
+
+// BASE_URL = "https://test.com"; // Compilation error
+
+
+    - In a test framework, constants can be useful for fixed configuration values. 
+      Naming constants in uppercase with underscores is a common Java convention.
