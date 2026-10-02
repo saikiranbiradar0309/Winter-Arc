@@ -1,0 +1,19 @@
+
+# Eclipse
+.metadata/
+.settings/
+.classpath
+.project
+
+# Java
+*.class
+
+# Maven
+target/
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+  
