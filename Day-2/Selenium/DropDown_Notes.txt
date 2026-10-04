@@ -1,0 +1,107 @@
+DropDown
+
+- A dropdown is a UI element that allows the user to select one or more options from a list.
+
+- For example:
+  
+  Select Country ▼
+  ----------------
+  United States
+  India
+  United Kingdom
+  Australia
+
+
+- When you click the dropdown, the available options are displayed, and you can select one.
+
+- In HTML, a select dropdown is created using the <select> tag:
+
+    <select id="country">
+        <option value="US">United States</option>
+        <option value="IN">India</option>
+        <option value="UK">United Kingdom</option>
+    </select>
+
+
+======================================================================
+
+
+How to Handle a Select Dropdown in Selenium
+
+- In Selenium with Java, we use the Select class to handle a standard HTML <select> dropdown.
+
+Step 1: Locate the dropdown
+WebElement country = driver.findElement(By.id("country"));
+
+
+Step 2: Create a Select object
+Select select = new Select(country);
+
+
+Step 3: Select an option
+- Selenium provides three common methods.
+
+    a. Select by visible text
+       select.selectByVisibleText("India");
+
+       This selects the option that displays India to the user.
+
+
+    b. Select by value
+       select.selectByValue("IN");
+
+       This uses the value attribute from the HTML:
+       <option value="IN">India</option>
+
+
+    c. Select by index
+       select.selectByIndex(1);
+       
+       Index starts from 0.
+       
+       For Example: 
+
+       Index 0 → United States
+       Index 1 → India
+       Index 2 → United Kingdom
+     
+
+Complete Example
+
+WebElement country = driver.findElement(By.id("country"));
+
+Select select = new Select(country);
+
+select.selectByVisibleText("India");
+
+
+======================================================================
+
+
+How to Get All Dropdown Options
+
+- You can use getOptions()
+
+WebElement country = driver.findElement(By.id("country"));
+
+Select sel = new Select(country);
+
+List<WebElement> options = select.getOptions();
+
+
+for (WebElement option : options) 
+{
+    System.out.println(option.getText());
+}
+
+
+
+How to Get the Selected Option
+
+String selectedOption =
+    select.getFirstSelectedOption().getText();
+
+System.out.println(selectedOption);
+
+
+======================================================================
