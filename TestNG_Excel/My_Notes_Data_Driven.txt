@@ -1,0 +1,314 @@
+Data Driven Testing
+
+
+01. Data-Driven Testing in Selenium
+    - Data-Driven testing (DDT) is a testing approach where you separate test data from the script/code. 
+
+    - Instead of writing the same Selenium test multiple times with different inputs, you write the test 
+      once and run it with multiple sets of data. 
+    
+
+================================================================================================
+
+
+02. Simple Example
+    - Suppose you want to test a login page with different usernames and passwords.
+
+    - Instead of writing:
+
+      Test 1 → username: user1, password: pass1
+      Test 2 → username: user2, password: pass2
+      Test 3 → username: user3, password: pass3
+
+    - You can store the data in an Excel file, CSV, JSON, database, or other data source:
+
+      Username	        Password	        Expected Result
+      user1	            pass1	            Login successful
+      user2	            wrong123	        Invalid password
+      user3	            pass3	            Login successful
+
+    - Then Selenium executes the same test logic for every row.
+
+
+================================================================================================
+
+
+03. What is Apache poi library?
+    - Apache POI is a Java library used to read, write, and manipulate Microsoft Office files, especially Excel files.
+
+    - In Selenium automation, Apache POI is commonly used to read test data from Excel and write test results back to Excel.
+
+
+
+
+04. Why is it used in Selenium?
+    - For example, suppose your login test data is stored in Excel:
+      
+      Username	        Password
+      user1	            pass123
+      user2	            pass456
+    
+    - Your Selenium script can use Apache POI to read each row and execute the login test with that data.
+
+
+05. Dependencies to Add in pom.xml
+
+    <!-- Source: https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>5.5.1</version>
+        <scope>compile</scope>
+    </dependency>
+
+
+    <!-- Source: https://mvnrepository.com/artifact/org.apache.poi/poi -->
+    <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <version>5.5.1</version>
+        <scope>compile</scope>
+    </dependency>
+
+
+================================================================================================
+
+
+06. Excel Hierarchy
+
+    Excel File --> Contains Workbook --> Contains Sheets --> Sheets Contains Rows --> Rows Contains Cells 
+
+    From Cell we want to read or write the cell 
+
+
+================================================================================================
+
+
+07. Java classes used with Apache POI to open and save the Excel file
+
+    a. FileInputStream - Reading Excel File 
+       - FileInputStream is a java I/O Class used to read bytes from a file.
+
+       - In Apache POI, we commonly use it to open an existing Excel file:
+         
+         FileInputStream fis = new FileInputStream("TestData.xlsx");
+         Workbook workbook = new XSSFWorkbook(fis);
+
+       - Think 
+            Excel File
+                ↓
+            FileInputStream
+                ↓
+            Apache POI Workbook
+    
+
+
+    b. FileOutputStream 
+       - FileOutputStream is used to write bytes to a file 
+
+       - With Apache POI, after modifying the workbook, we use it to save the changes:
+
+       - FileOutputStream fos = new FileOutputStream("TestData.xlsx");
+         workbook.write(fos);
+       
+       - Think:
+         
+         Apache POI Workbook
+                    ↓
+         FileOutputStream
+                    ↓
+         Excel File
+
+
+    - FileInputStream is used to read/open an existing Excel file, 
+      whereas FileOutputStream is used to write/save data into an Excel file. 
+      Apache POI uses these Java I/O streams to read from and write to Excel workbooks.
+
+
+
+08. Apache POI Classes 
+    - For Selenium automation, the most important Apache POI classes are related to Excel files.
+
+    - XSSFWorkbook: Represents the entire Excel workbook
+
+    - XSSFSheet: Represents a worksheet 
+
+    - XSSFRow: Represents a row
+
+    - XSSFCell: Represents a cell
+
+    
+    - The Hierarchy:
+      
+
+      XSSFWorkbook
+            ↓
+      XSSFSheet
+            ↓
+      XSSFRow
+            ↓
+      XSSFCell
+
+
+
+================================================================================================
+
+
+09. Reading Data from Excel 
+
+    - Usually we store test data excel inside our project directory like inside test data.
+    
+    - We wont store it inside like Downloads or Documents etc 
+
+    - Rows will count from 0 and Cells will count from 1
+
+
+package Youtube;
+
+
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class ReadingDataFromExcel {
+
+	public static void main(String[] args) throws IOException {
+		
+		
+		FileInputStream fis = new FileInputStream("/Users/saikiranbiradar/Reminders/TestNG_Excel/testdata/Book 5.xlsx");
+		
+		XSSFWorkbook workbook = new XSSFWorkbook(fis);
+		
+		XSSFSheet sheet = workbook.getSheet("Book_Indent");  	// Preferred
+		//XSSFSheet sheet = workbook.getSheetAt(0);  // Index value 
+		
+		
+		// FInd out No.of Rows 
+		int totalRows = sheet.getLastRowNum();
+		
+		System.out.println("Number of Rows: " + totalRows);
+		
+		
+		
+		// FInd out No.of Cells 
+		int totalCells = sheet.getRow(1).getLastCellNum();
+		
+		System.out.println("Number of Cells: " +totalCells);
+		
+		
+		for(int rows=0; rows<=totalRows; rows++)
+		{
+			XSSFRow currentRow = sheet.getRow(rows);
+			
+			for(int cells=0; cells<totalCells; cells++)
+			{
+				XSSFCell cell = currentRow.getCell(cells);
+				System.out.print(cell.toString() +"\t");
+			}
+			
+			System.out.println();
+		}
+		
+		
+		workbook.close();
+		
+		fis.close();
+		
+
+	}
+
+}
+
+
+
+================================================================================================
+
+
+10. Writing Data to Excel 
+
+package Youtube;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class WritingDataIntoExcel {
+	
+	public static void main(String[] args) throws IOException {
+		
+		
+		// Create a FileOutputStream to specify the location
+        // where the Excel file will be created
+		FileOutputStream fos = new FileOutputStream("/Users/saikiranbiradar/Reminders/TestNG_Excel/testdata/Items_Purchased.xlsx");
+	
+		
+		// Create a new Excel workbook
+		XSSFWorkbook workbook = new XSSFWorkbook();
+	
+		
+        // Create a new worksheet named "Data"
+		XSSFSheet sheet = workbook.createSheet("Data");
+		
+		// Create the first row at index 0
+        // This row will contain the column headers
+		XSSFRow row1 = sheet.createRow(0);
+		row1.createCell(0).setCellValue("ItemName");
+		row1.createCell(1).setCellValue("PuchaseDate");
+		row1.createCell(2).setCellValue("Price");
+		row1.createCell(3).setCellValue("Location");
+		
+		
+		XSSFRow row2 = sheet.createRow(1);
+		row2.createCell(0).setCellValue("Macbook Air M5");
+		row2.createCell(1).setCellValue("13/09/2026");
+		row2.createCell(2).setCellValue("129999");
+		row2.createCell(3).setCellValue("Jambagi");
+		
+		
+		XSSFRow row3 = sheet.createRow(2);
+		row3.createCell(0).setCellValue("Samsung S25 Ultra");
+		row3.createCell(1).setCellValue("28/09/2026");
+		row3.createCell(2).setCellValue("92999");
+		row3.createCell(3).setCellValue("Bengaluru");
+		
+		
+		XSSFRow row4 = sheet.createRow(3);
+		row4.createCell(0).setCellValue("Iphone 17 Pro Max");
+		row4.createCell(1).setCellValue("02/10/2026");
+		row4.createCell(2).setCellValue("139999");
+		row4.createCell(3).setCellValue("Bengaluru");
+		
+		
+		XSSFRow row5 = sheet.createRow(4);
+		row5.createCell(0).setCellValue("Iphone 15");
+		row5.createCell(1).setCellValue("31/07/2025");
+		row5.createCell(2).setCellValue("90999");
+		row5.createCell(3).setCellValue("Bengaluru");
+		
+		
+		
+        // Write the workbook data into the Excel file
+		workbook.write(fos);
+		
+		workbook.close();
+		fos.close();
+		
+		
+		System.out.println("File is Created");
+	
+	}
+}
+
+
+
+================================================================================================
+
+
+11. Writing Data Dynamically

@@ -1,0 +1,95 @@
+Reading test data from Excel using Apache POI
+
+- Imagine you're automating a registration page. You need to enter the following details:
+
+    First Name	        Last Name	        Phone
+    Amol	            Jadhav	            9090901001
+    Rutuja	            Kale	            9090901002
+    Sonali	            Jadhav	            9090901003
+    Vikas	            Mule	            9090901004
+
+- Instead of hardcoding these values in your Selenium script, you can store them in an Excel file and read them whenever 
+  your test executes.
+
+
+=================================================================================
+
+
+Why do we use Apache POI?
+
+- Apache POI is a Java library that allows us to read, write, and manipulate Microsoft Office files, including Excel.
+
+- In Selenium automation, we use it to:
+  a. Read test data from Excel.
+  b. Pass multiple sets of data to the same test case.
+  c. Separate test data from automation code.
+  d. Reuse test scripts with different inputs.
+
+
+
+=================================================================================
+
+
+Remember these 4 steps
+
+- MEMORY TRICK: F → W → S → C
+
+1. FileInputStream — Open the file
+   
+   - Connect Java to the Excel file.
+
+   - FileInputStream fis = new FileInputStream("TestData.xlsx");
+
+
+
+2. XSSFWorkbook — Load the workbook
+   
+   - Load the Excel workbook using the file connection.
+
+   - XSSFWorkbook workbook = new XSSFWorkbook(fis);
+
+
+
+3. XSSFSheet — Select the sheet
+   
+   - Choose the Excel sheet you want to read.
+
+   - XSSFSheet sheet = workbook.getSheet("Register");
+
+
+
+4. Get row and cell — Capture the data
+   
+   - Read the value from a particular row and column.
+
+   - String name = sheet.getRow(0).getCell(0).getStringCellValue();
+
+
+
+- Think of it like opening a book:
+  a. FileInputStream = Open the book.
+  b. XSSFWorkbook = Load the entire book.
+  c. XSSFSheet = Open a specific chapter.
+  d. getRow() and getCell() = Find a particular sentence or value.
+
+
+- IMPORTANT: Java uses zero-based indexing, so the first row is row 0 and the first column is column 0.
+
+
+
+=================================================================================
+
+
+Data-Driven Testing using @DataProvider
+
+1. What is Data-Driven Testing?
+   - Data-Driven Testing is a testing approach in which the same test script executes multiple times with different 
+     sets of test data.
+
+   - For example, suppose you want to test a registration page with four users.
+
+   - Without DataProvider, you might write four separate test methods or repeatedly change the values in your code.
+
+   - With @DataProvider, you write one test method and supply four sets of input data.
+
+   
