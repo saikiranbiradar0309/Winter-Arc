@@ -1,0 +1,345 @@
+01. What is an Alert?
+	- A browser Alert is a JavaScript dialog created by the web Page.
+	
+	- For Example:
+	  alert("Login Successful");
+	  
+	- It appears outside the normal HTML DOM.
+	
+	- The last point is extremely important:
+	  "A Selenium Alert is not a normal web element"
+	  
+	- So this will not work:
+	  driver.findElement(By.id("alert")).click();
+	
+	- Instead Selenium provides the Alert interface.
+
+	
+
+=====================================================================
+
+
+
+02. Simple Alert
+	- Displays a message and an OK button.
+	  alert("Hello");
+	
+	- Looks conceptually like
+
+		┌──────────────────────────┐
+		│ Message from webpage     │
+		│                          │
+		│ Hello                    │
+		│                          │
+		│              [ OK ]      │
+		└──────────────────────────┘
+	
+	- Use:
+	    driver.switchTo().alert().accept();
+
+
+Code
+
+package Alerts;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class SimpleAlert {
+
+	public static void main(String[] args) throws InterruptedException {
+		
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		
+		driver.get("https://www.selenium.dev/selenium/web/alerts.html#");
+		Thread.sleep(3000);
+		
+		
+		// Simple Alert
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@id='alert']"))).click();
+		
+		Thread.sleep(3000);
+		driver.switchTo().alert().accept();
+		
+		
+		Thread.sleep(3000);
+		
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@id='empty-alert']"))).click();
+		
+		Thread.sleep(3000);
+		
+		driver.switchTo().alert().accept();
+		Thread.sleep(3000);
+		
+		driver.close();
+
+	}
+
+}
+
+
+=====================================================================
+
+
+03. Confirmation Alert
+	- Has OK and Cancel
+	  confirm("Are you sure?");
+	
+	- You can:
+	  a. Click OK 			--> accept()
+	  b. Click Cancel 		--> dismiss()
+	
+	
+	- Use
+	  driver.switchTo().alert().accept();
+	  
+	  driver.switchTo().alert().dismiss();
+
+
+Code
+
+
+package Alerts;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class Confirmation_Alert {
+
+	public static void main(String[] args) throws InterruptedException {
+		
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		
+		driver.get("https://www.selenium.dev/selenium/web/alerts.html#");
+		
+		Thread.sleep(3000);
+		
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@id='confirm']"))).click();
+		
+		
+		Thread.sleep(3000);
+		
+		driver.switchTo().alert().accept();
+		
+		Thread.sleep(3000);
+		
+		String currentURL = driver.getCurrentUrl();
+		System.out.println(currentURL);
+		
+		driver.close();
+	}
+
+}
+
+
+=====================================================================
+
+
+04. Prompt Alert
+	- Allows the user to enter text.
+	  prompt("Enter your name:");
+	 
+	- You can:
+	  a. Switch to the Alert
+	  b. Enter Text
+	  c. Accept or Dismiss it
+	
+	
+	- Use
+	  Alert alert = driver.switchTo().alert();
+	  
+	  alert.sendKeys("John");
+	  alert.accept();
+
+
+Code
+
+package Alerts;
+
+import java.time.Duration;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class Prompt_Alert {
+
+	public static void main(String[] args) throws InterruptedException {
+		
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		
+		driver.get("https://www.selenium.dev/selenium/web/alerts.html#");
+		
+		
+		Thread.sleep(3000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@id='prompt']"))).click();
+		
+		
+		Thread.sleep(3000);
+		Alert alert = driver.switchTo().alert();
+		alert.sendKeys("Sent Something...");
+		
+		
+		Thread.sleep(3000);
+		alert.accept();
+		
+		
+		Thread.sleep(3000);
+		driver.close();
+	}
+
+}
+
+
+
+=====================================================================
+
+05. The Most Important Selenium Code
+	- In Java Selenium, Remember this
+	  Alert alert = driver.switchTo().alert();
+	  
+	- Now you have an Alert object.
+	
+	- From there:
+	  alert.getText();
+	  gets the alert message.
+	
+	- alert.accept();
+	  Clicks OK
+	
+	- alert.dismiss();
+	  Clicks cancel
+	
+	- alert.sendKeys("Hello");
+	  Types into a prompt
+
+
+=====================================================================
+
+
+06. Why Do We Need switchTo()?
+	- When Selenium interacts with a web page, it normally works with the current browser 
+	  context.
+	
+	- For example:
+	  driver.findElement(By.id("username"));
+	  
+	- But an alert is a different browser-level context.
+
+	- So Selenium needs you to explicitly switch to it:
+	  driver.switchTo().alert();
+
+
+=====================================================================
+
+
+07. The Four Alert Operations You Must Know
+	
+	- Memorize these 
+	  
+	  Alert alert = driver.switchTo().alert();
+	  
+	  alert.getText();
+	  alert.accept();
+	  alert.dismiss();
+	  alert.sendKeys();
+	
+	a. getText()
+		- Gets the alert message
+		  String text = alert.getText();
+	
+	
+	b. accept()
+		- Clicks OK
+			alert.accept();
+	
+	
+	c. dismiss()
+		- Clicks cancel
+			alert.dismiss();
+	
+	
+	d. sendKeys()
+		- Enter text into the prompt.
+		 	alert.sendKeys("Selenium");
+
+
+
+=====================================================================
+
+
+08. The Most Important Real-World Problem: Timing
+
+	- Suppose you write:
+	  driver.findElement(By.id("button")).click();
+	  Alert alert = driver.switchTo().alert();
+	
+	- What if the alert takes 2 seconds to appear?
+	
+	- You might get:
+		"NoAlertPresentException"
+	
+	- Because the selenium tried to switch before the alert existed.
+	
+	- This is why experts use explicit waits.
+
+
+
+=====================================================================
+
+
+09. Waiting for an Alert
+	
+	- Selenium provides
+		ExpectedConditions.alertIsPresent();
+	
+	- Example:
+	  
+	  	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+	  	
+	  	driver.findElement(By.id("alertButton")).click();
+	  	
+	  	Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+	  	
+	  	System.out.println(alert.getText());
+	  	
+	  	alert.accept();
+
+
+=====================================================================
+
+
+10. 
+
+
+
+
+
+
+
+
+
