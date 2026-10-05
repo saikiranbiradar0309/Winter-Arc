@@ -1,0 +1,345 @@
+01. What is Frames?
+	- A Frame is a Separate HTML document embedded inside another HTML page.
+	
+	- Think of it as a webpage inside a webpage.
+	
+	- Example:
+	  The main page:
+
+			<html>
+			  <body>
+			
+			    <h1>My Application</h1>
+			
+			    <iframe id="paymentFrame">
+			        <!-- Separate HTML document -->
+			
+			        <input id="cardNumber">
+			        <input id="cvv">
+			
+			    </iframe>
+			
+			  </body>
+			</html>
+		
+	
+	- Visually, you may see:
+	
+		------------------------------------------------
+		|             My Application                   |
+		|                                              |
+		|  ------------------------------------------  |
+		|  | Payment iframe                         |  |
+		|  |                                        |  |
+		|  | Card Number: [____________]            |  |
+		|  | CVV:         [________]                |  |
+		|  |                                        |  |
+		|  ------------------------------------------  |
+		|                                              |
+		------------------------------------------------
+
+
+	- Here:
+
+		Main Page
+		   |
+		   └── iframe
+		        |
+		        └── Separate HTML document
+		             |
+		             ├── Card Number
+		             └── CVV
+
+	
+	- Technically the important point is, The iframe has its own HTML Document and DOM
+	
+	
+============================================================================================
+
+
+02. The most important concept: switchTo()
+
+	- You need to tell Selenium:
+		"Stop looking at the main page. Go inside this iframe."
+	
+	- Syntax:
+		driver.switchTo().frame();
+	
+	- Then interact with elements:
+		driver.findElement(By.id("cardNumber")).sendKeys("123456789");
+	
+	- After finishing:
+		driver.switchTo().defaultContent();
+	
+	- So remember this pattern:
+	
+		MAIN PAGE
+		   ↓
+		SWITCH INTO FRAME
+		   ↓
+		INTERACT WITH ELEMENTS
+		   ↓
+		SWITCH OUT
+		   ↓
+		MAIN PAGE
+	
+============================================================================================
+
+03. Three ways to Switch to Frames
+	
+	a. Using iframe index
+		- driver.switchTo().frame(0);
+		
+		- Example:
+			List<WebElement> frames = driver.findElements(By.tagName("iframe"));
+			System.out.println(frames.size());
+			driver.switchTo().frame(0);
+			
+		
+		- Why this is not preferred?				****************
+			* Because index depends on the iframe's position
+			* Today
+			  	iframe 0
+			  	iframe 1
+			  	iframe 2
+			
+			* Tomorrow developer changes the page:
+				iframe 0
+				iframe 1
+				iframe 2
+				iframe 3
+				iframe 4
+			
+			* Your test could break.
+			
+			* Professional Approach
+				- Avoid index unless the frame structure is stable and there is legitimate 
+				  reason to use it.
+
+
+
+
+	b. Using WebElement
+		- Thisis much better.
+		
+		- HTML:
+			<iframe id="paymentFrame"></iframe>
+		
+		- Selenium:
+			WebElement frame = driver.findElement(By.id("paymentFrame"));
+			driver.switchTo().frame(frame);
+		
+		- Then:
+			driver.findElement(By.id("cardNumber")).sendKeys("123456789");
+		
+		- This is much more readable
+	
+	
+	
+	c. Using iframe name or ID
+		- If iframe has:
+			<iframe id="paymentFrame" name="paymentFrame"></iframe>
+			
+		- You can do:
+			driver.switchTo().frame("paymentFrame");
+		
+		- This is concise, but in modern automation frameworks I generally prefer locating
+		  the frame as a WebElement, especially when you want to explicit waits and better
+		  debugging
+	    	
+
+============================================================================================
+
+
+04. The professional approach: ExpectedConditions			frame_Demo2.java
+	- This is where you should move beyond beginner Selenium.
+	
+	- Dont simply do:
+		driver.switchTo().frame(frame);
+	
+	- When the iframe loads dynamically.
+	
+	- Instead:
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		
+		wait.until(
+			ExpectedConditions.frameToBeAvailableAndSwitchToIt(
+				By.id("paymentFrame")));	
+	
+	- Now Selenium:
+		a. Waits for the iframe
+		b. Waits until it is available
+		c. Switches to it
+		
+	- Then:
+		driver.findElement(By.id("cardNumber")).sendKeys("123456789");
+		
+	- This is much more enterprise-level approach.
+
+	
+============================================================================================
+
+
+05. defaultContent() vs parentFrame()				frameDemo3.java
+	- This is very important for professional-level iframe handling.
+	
+	
+	a. defaultContent()
+		- driver.switchTo().defaultContent();
+		
+		- Means:
+			Go all the way back to the main document
+		
+		- Example:
+
+			Main Page
+			   |
+			   └── Frame A
+			        |
+			        └── Frame B	
+		
+		- If you're inside frame B:
+			driver.switchTo().defaultContent();
+		
+		- You go:
+			Frame B
+			   ↓
+			Main Page	
+	
+	
+	b. parentFrame()
+		- driver.switchTo().parentFrame();
+		
+		- Means:
+			Move one level up.
+		
+		- Example:
+			Main Page
+			   |
+			   └── Frame A
+			        |
+			        └── Frame B
+		
+		- Currently:
+			Frame B
+		
+		- Execute
+			driver.switchTo().parentFrame();
+		
+		- Now
+			Frame A
+		
+		- Execute Again
+			driver.switchTo().parentFrame();
+		
+		- Now
+			Main Page
+
+
+============================================================================================
+
+
+06. Nested iframes									NestedFrames.java
+	- This is an important interview topic.
+	
+	- Suppose
+
+		Main Page
+		    |
+		    └── iframe A
+		           |
+		           └── iframe B
+		                  |
+		                  └── button
+	
+	- You cannot directly switch to iframe B from the main page.
+	
+	- You must first enter A.		                  
+
+		driver.switchTo().frame("iframeA");
+		
+		driver.switchTo().frame("iframeB");
+		
+		driver.findElement(By.id("submit")).click();
+	
+	- Then:
+		driver.switchTo().defaultContent();
+	
+	- Or
+		driver.switchTo().parentFrame();
+		if you only want to move from B back to A.
+
+		
+============================================================================================
+
+
+07. Common iframe mistakes 				*******************
+	
+	a. Mistake 1
+		- Trying to find iframe element diractly without switching
+			driver.findElement(By.id("cardNumber"));
+		
+		- If its inside iframe --> Fails.
+		
+		- Correct
+			driver.switchTo().frame("paymentFrame");
+			
+			driver.findElement(By.id("cardNumber"));
+	
+	
+	b. Mistake 2
+		- Forgetting to Switch back.
+		
+		- You do
+			driver.switchTo().frame("paymentFrame");
+			
+			driver.findElement(By.id("cardNumber")).sendKeys("123");
+		
+		- Then try:
+			driver.findElement(By.id("username")).sendKeys("saikiran");
+		
+		- If username is on the main page, Selenium is still inside the iframe.
+		
+		- You need:
+			driver.switchTo().defaultContent();
+			
+			driver.findElement(By.id("username")).sendKeys("saikiran");
+	
+	
+	c. Mistake 3
+		- Using index everywhere
+		
+		- Avoid
+			driver.switchTo().frame(0);
+		
+		- unless appropriate
+		
+		- prefer:
+				driver.switchTo().frame(
+				    driver.findElement(By.id("paymentFrame"))
+				);
+		
+		- Or
+				wait.until(
+				    ExpectedConditions.frameToBeAvailableAndSwitchToIt(
+				        By.id("paymentFrame")
+				    )
+				);
+	
+	
+	
+	d. Mistake 4
+		- Thinking iframe is a window
+		
+		- Browser window/tab you use:
+			driver.switchTo().window(windowHandle);
+		
+		- iframe you use:
+			driver.switchTo().frame(...);
+
+			
+============================================================================================
+
+
+08. 
