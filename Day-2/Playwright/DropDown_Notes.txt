@@ -1,0 +1,54 @@
+What is a select dropdown?
+
+- A standard select dropdown looks like this:
+  
+    <select id="country">
+        <option value="US">United States</option>
+        <option value="IN">India</option>
+        <option value="UK">United Kingdom</option>
+    </select>
+
+- In Playwright, you can select an option without creating a separate Select object.
+
+-----------------------------------
+
+Select by value
+
+- This is one of the most commonly used approaches.
+  await page.locator('#country').selectOption('IN');
+
+
+- This selects:
+  <option value="IN">India</option>
+
+-----------------------------------
+
+Select by visible label
+
+- You can also select using the text displayed to the user:
+  await page.locator('#country').selectOption({ label: 'India' });
+
+
+- So:
+  <option value="IN">India</option>
+
+
+- will be selected because its visible text is India.
+
+
+-----------------------------------
+
+Select by index
+
+- You can select using the option's index:
+  await page.locator('#country').selectOption({ index: 1 });
+
+- Index starts from 0.
+  0 → United States
+  1 → India
+  2 → United Kingdom
+
+- Therefore, index: 1 selects India.
+
+====================================================================================
+

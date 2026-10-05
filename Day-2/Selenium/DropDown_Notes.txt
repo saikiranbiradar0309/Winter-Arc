@@ -105,3 +105,228 @@ System.out.println(selectedOption);
 
 
 ======================================================================
+
+What is Custom DropDown in Selenium?
+
+- A Custom Dropdown is a dropdown that is not created using the standard HTML <select> tag.
+
+- Modern web applications commonly use:
+  <div>
+  <span>
+  <li>
+  <input>
+  <button>
+  
+  to create dropdowns
+
+- Example:
+
+	<div class="dropdown">
+	    <button>Select Country</button>
+	
+	    <div class="options">
+	        <div>United States</div>
+	        <div>India</div>
+	        <div>United Kingdom</div>
+	    </div>
+	</div>
+
+- Here, there is no <select> tag.
+
+- Therefore, Selenium's Select class cannot be used.
+
+
+======================================================================
+
+
+Standard Dropdown vs Custom Dropdown
+
+a. Standard Dropdown
+   - A standard dropdown uses the HTML <select> tag.
+
+		<select id="country">
+		    <option value="US">United States</option>
+		    <option value="IN">India</option>
+		    <option value="UK">United Kingdom</option>
+		</select>
+	
+	- For this type of dropdown, we can use:
+
+		Select select = new Select(country);
+		
+		select.selectByVisibleText("India");
+		select.selectByValue("IN");
+		select.selectByIndex(1);
+
+
+
+b. Custom Dropdown 
+   - A custom dropdown does not use <select>.
+   
+   - Example:
+   
+		<div class="dropdown">
+		    <button>Select Country</button>
+		
+		    <ul>
+		        <li>United States</li>
+		        <li>India</li>
+		        <li>United Kingdom</li>
+		    </ul>
+		</div>
+
+
+   - For this type of dropdown:
+     Select select = new Select(element);
+	 ❌ Cannot be used.
+
+   - Instead, we use normal Selenium methods such as:
+
+		click();
+		findElement();
+		findElements();
+		getText();
+
+======================================================================
+
+
+How to Handle a Custom Dropdown in Selenium
+
+- Suppose the HTML looks like:
+
+		<div id="countryDropdown">
+		    <button>Select Country</button>
+		
+		    <div class="options">
+		        <div>United States</div>
+		        <div>India</div>
+		        <div>United Kingdom</div>
+		    </div>
+		</div>
+
+- We want to select:
+
+Step 1: Locate the Dropdown
+WebElement dropdown =
+    driver.findElement(By.id("countryDropdown"));
+
+
+Step 2: Click the Dropdown
+dropdown.click();
+This opens the list of available options.
+
+
+Step 3: Locate the Required Option
+WebElement india =
+    driver.findElement(By.xpath("//div[text()='India']"));
+
+Step 4: Click the Required Option
+india.click();
+
+======================================================================
+
+
+Handling Custom Dropdown Using XPath
+
+- One of the common approaches is:
+	
+	driver.findElement(
+	    By.xpath("//div[text()='India']")
+	).click();
+
+- This means:
+	  Find a <div>
+	  Whose text is exactly India
+	  Click it
+
+
+======================================================================
+
+
+Using contains() with Custom Dropdowns
+
+- Sometimes the option contains additional text.
+
+- Example
+	<div>India - IN</div>
+
+- We can use:
+	driver.findElement(
+	    By.xpath("//div[contains(text(),'India')]")
+	).click();
+
+- This finds an element containing the text:
+     INDIA
+
+
+======================================================================
+
+Using normalize-space()
+
+- Sometimes there may be unwanted spaces.
+
+- Example
+     <div>   India   </div>
+
+- We can use 
+	driver.findElement(
+	    By.xpath("//div[normalize-space()='India']")
+	).click();
+
+- normalize-space() removes unnecessary leading and trailing spaces.
+
+======================================================================
+
+Handling Custom Dropdown Using findElements()
+
+- Suppose the dropdown contains multiple options:
+
+	<div class="option">United States</div>
+	<div class="option">India</div>
+	<div class="option">United Kingdom</div>
+	<div class="option">Australia</div>
+
+- We can get all options:
+  
+  List<WebElement> options =
+    driver.findElements(By.className("option"));
+
+
+- Then iterate through them.
+
+	for (WebElement option : options) {
+	
+	    if (option.getText().equals("India")) {
+	        option.click();
+	        break;
+	    }
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

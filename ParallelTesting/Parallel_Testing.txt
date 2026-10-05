@@ -575,16 +575,442 @@ Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
 	
 Demo5: Executing Parallel Test cases in Chrome browser and Safari
 	
+
+Chrome_Safari.java	
+
+package parallelTesting;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+public class Chrome_Safari {
+
+	private static ThreadLocal<WebDriver> threadLocal =
+			new ThreadLocal<WebDriver>();
+	
+	
+	public static WebDriver getInstance(String browser)
+	{
+		if(browser.equals("chrome"))
+		{
+			WebDriver driver = new ChromeDriver();
+			threadLocal.set(driver);
+		}
+		
+		else if(browser.equals("safari"))
+		{
+			WebDriver driver = new SafariDriver();
+			threadLocal.set(driver);
+		}
+		else
+		{
+			System.out.println("Invalid Driver");
+		}
+		
+		return threadLocal.get();
+	}
+	
+	
+	@Parameters({"browser"})
+	@Test
+	public void testCase1(String browser) throws InterruptedException
+	{
+		WebDriver driver = Chrome_Safari.getInstance(browser);
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		
+		driver.get("https://www.saucedemo.com/");
+		
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.id("user-name")))
+					.sendKeys("standard_user");
+		
+		
+		wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.id("password")))
+					.sendKeys("secret_sauce");
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("login-button"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.
+				elementToBeClickable(By.id("add-to-cart-sauce-labs-bike-light"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.
+				elementToBeClickable(By.className("shopping_cart_link"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("checkout"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.id("first-name")))
+					.sendKeys("Saikiran");
+		
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.id("last-name")))
+					.sendKeys("Biradar");
+		
+		
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.id("postal-code")))
+					.sendKeys("560068");
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions
+				.elementToBeClickable(By.id("continue"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions
+				.elementToBeClickable(By.id("finish"))).click();
+		
+		
+		Thread.sleep(4000);
+		
+		driver.close();
+	}
+}
+
+
+
+chrome_safari.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite" parallel="true">
+
+
+  <test name="Test1">
+  	
+  	<parameter name="browser" value="chrome"></parameter>
+  	<classes>
+  		<class name="parallelTesting.Chrome_Safari"/>
+  	</classes>
+  </test> <!-- Test -->
+  
+  
+  <test name="Test2">
+  	
+  	<parameter name="browser" value="safari"></parameter>
+  	<classes>
+  		<class name="parallelTesting.Chrome_Safari"/>
+  	</classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+
+
+Output
+
+[RemoteTestNG] detected TestNG version 7.12.0
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+
+===============================================
+Suite
+Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
+===============================================
+
+
 	
 	
 	
+===================================================================
+
+
+Demo 6: In Realtime we always follow standard approach in above code we took
+        everything in single code and that is not good approach
+	
+
+
+SauceDemoTest.java
+
+
+package parallelTesting;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+public class SauceDemoTest {
+	
+	@Parameters({"browser"})
+	@Test
+	public void testCase1(String browser) throws InterruptedException
+	{
+		
+		Demo5.setDriver(browser);
+		
+		WebDriver driver = Demo5.getDriver();
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		
+		driver.get("https://www.saucedemo.com/");
+		
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.id("user-name")))
+					.sendKeys("standard_user");
+		
+		
+		wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.id("password")))
+					.sendKeys("secret_sauce");
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("login-button"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.
+				elementToBeClickable(By.id("add-to-cart-sauce-labs-bike-light"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.
+				elementToBeClickable(By.className("shopping_cart_link"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("checkout"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.id("first-name")))
+					.sendKeys("Saikiran");
+		
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.id("last-name")))
+					.sendKeys("Biradar");
+		
+		
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.id("postal-code")))
+					.sendKeys("560068");
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions
+				.elementToBeClickable(By.id("continue"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions
+				.elementToBeClickable(By.id("finish"))).click();
+		
+		
+		Thread.sleep(4000);
+		
+		driver.close();
+	}
+}
+
+
+
+
+
+We create one method to get the driver and other method to set the driver
+
+Demo5.java
+
+package parallelTesting;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.safari.SafariDriver;
+
+public class Demo5 {
+	
+	private static ThreadLocal<WebDriver> threadLocal =
+			new ThreadLocal<WebDriver>();
 	
 	
 	
+	// Setting Driver
+	public static void setDriver(String browser)
+	{
+		if(browser.equals("chrome"))
+		{
+			WebDriver driver = new ChromeDriver();
+			threadLocal.set(driver);
+		}
+		
+		else if(browser.equals("safari"))
+		{
+			WebDriver driver = new SafariDriver();
+			threadLocal.set(driver);
+		}
+		else
+		{
+			System.out.println("Invalid Driver");
+		}
+	}
 	
 	
 	
+	// Getting Driver
+	public static WebDriver getDriver()
+	{
+		return threadLocal.get();
+	}
+}
+
+
+saucedemotest.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Suite"	thread-count="2" parallel="tests">
+
+  <test name="Test1">
+  	<parameter name="browser" value="chrome"></parameter>
+    <classes>
+      <class name="parallelTesting.SauceDemoTest"/>
+    </classes>
+  </test> <!-- Test -->
+  
+  
+  <test name="Test2">
+  	<parameter name="browser" value="safari"></parameter>
+    <classes>
+      <class name="parallelTesting.SauceDemoTest"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+
+
+===================================================================
+
+
+
+Demo 7: Test in pre condition level
+
+SauceDemoTest2.java
+
+package parallelTesting;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+public class SauceDemoTest {
 	
+	@Parameters({"browser"})
+	@BeforeTest
+	public void setUp(String browser)
+	{
+		Demo5.setDriver(browser);
+	}
 	
-	
+	@Test
+	public void testCase1() throws InterruptedException
+	{
+		
+		WebDriver driver = Demo5.getDriver();
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		
+		driver.get("https://www.saucedemo.com/");
+		
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.id("user-name")))
+					.sendKeys("standard_user");
+		
+		
+		wait.until(ExpectedConditions.
+				visibilityOfElementLocated(By.id("password")))
+					.sendKeys("secret_sauce");
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("login-button"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.
+				elementToBeClickable(By.id("add-to-cart-sauce-labs-bike-light"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.
+				elementToBeClickable(By.className("shopping_cart_link"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("checkout"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.id("first-name")))
+					.sendKeys("Saikiran");
+		
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.id("last-name")))
+					.sendKeys("Biradar");
+		
+		
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.id("postal-code")))
+					.sendKeys("560068");
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions
+				.elementToBeClickable(By.id("continue"))).click();
+		
+		Thread.sleep(2000);
+		
+		wait.until(ExpectedConditions
+				.elementToBeClickable(By.id("finish"))).click();
+		
+		
+		Thread.sleep(4000);
+		
+		driver.close();
+	}
+}
+
+
+Demo5 Same 
+
+XML Same
 	
