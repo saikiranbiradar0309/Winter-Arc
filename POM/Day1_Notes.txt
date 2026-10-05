@@ -1,0 +1,395 @@
+01. First, understand the problem POM solves
+	- Imagine you are automating a CRM application that has 100 web pages:
+	  a. Login Page
+	  b. Home Page
+	  c. Contacts Page
+	  d. Leads Page
+	  e. Deals Page
+	  f. Reports Page
+	  g. And many more
+	
+	
+	- Suppose you write all your Selenium code directly inside your test cases.
+	  
+		@Test
+		public void loginTest() {
+		    WebDriver driver = new ChromeDriver();
+		    driver.get("https://example.com");
+		
+		    driver.findElement(By.id("email"))
+		          .sendKeys("test@gmail.com");
+		
+		    driver.findElement(By.id("password"))
+		          .sendKeys("password123");
+		
+		    driver.findElement(By.xpath("//button[text()='Login']"))
+		          .click();
+		}	
+	
+	
+	- Now imagine you have 50 test cases that need to log in. You may end up repeating 
+	  the same locators and actions in many test cases.  
+	  
+	- Problem: If the Login button's locator changes, you may need to update many test 
+	  cases.
+	  
+	  
+	- With Page Object Model
+	  
+	  LoginPage.java
+
+		@FindBy(id = "email")
+		WebElement username;
+		
+		@FindBy(id = "password")
+		WebElement password;
+		
+		@FindBy(xpath = "//button[text()='Login']")
+		WebElement loginButton;
+	  
+	  
+
+		public void enterUsername(String uname) {
+		    username.sendKeys(uname);
+		}
+		
+		public void enterPassword(String pass) {
+		    password.sendKeys(pass);
+		}
+		
+		public void clickOnLoginButton() {
+		    loginButton.click();
+		}
+	  
+	
+	- Now all test cases can reuse these methods. If the locator changes, you update it in 
+	  one place.	  
+	  
+	  
+===================================================================================	  
+	  
+
+02. What is Page Object Model (POM)?
+    
+    - Page Object Model is a design pattern used in selenium automation.
+    
+    - In POM, we create separate Java class for each web page of the application.
+	  
+	- Suppose 
+	  a. Web Application contains
+	      - Login, Contacts, Leads, Deals etc
+	  
+	  
+	  b. Page Layer(POM) Contains
+	  	  - LoginPage.java 		--> Locators and login actions
+	  	  - ContactPage.java	--> Locators and contact actions
+	  
+	  
+	  c. Test Layer(TestNG)
+	  	  - LoginPageTest.java 		--> Tests login functionality
+	  	  - ContactPageTest.java 	--> Tests contact creation
+
+
+	- For example, if your application has 100 pages, you can create 100 corresponding 
+	  page classes. Each class contains the locators and actions associated with its page.
+	  
+
+	- Think of it like this:
+	  a. Pages Layer: Knows how to interact with the application.
+	  b. Test Layer: Knows what functionality to test.
+	  c. - BaseTest: Manages common WebDriver setup.
+	  
+
+
+===================================================================================	  
+
+
+
+03. What is @FindBy() annotation and @FindBys() annotation
+
+	a. @FindBy()
+		- @FindBy() used to sepcify one locator strategy for an element
+		
+		- For example:
+		  
+		  @FindBy(id = 'email')
+		  WebElement username;
+		  
+		- This means: Find the element whos id is email and store it in the 
+		  username WebElement
+		
+		- It is similar to
+		  WebElement username = driver.findElement(By.id("email"));
+		
+		- Another Example:
+		  
+		  @FindBy(xpath = "//button[text()='Login']")
+		  WebElement loginButton;
+		
+		- This tells selenium: find the login button using the xpath
+		
+		
+		- Common @FindBy strategies
+
+			@FindBy(id = "email")
+			WebElement username;
+			
+			@FindBy(name = "password")
+			WebElement password;
+			
+			@FindBy(className = "login-btn")
+			WebElement loginButton;
+			
+			@FindBy(css = "#email")
+			WebElement email;
+			
+			@FindBy(xpath = "//button[text()='Login']")
+			WebElement loginButton;
+
+		
+		- Easy way to remember
+		  @FindBy = "Find this element BY this locator."
+
+
+
+	b. @FindBys()
+	   - @FindBys() is used when you want to specify multiple locator conditions that are 
+	     applied together in sequence
+	   
+	   - Example:
+	     @FindBys({
+	     	@FindBy(tagName = "form"),
+	     	@FindBy(id = "email")
+	     })
+		 WebElement username;
+	   
+	   
+	   - Conceptually, Selenium searches:
+
+			form
+			   ↓
+			inside that form
+			   ↓
+			element with id="email"
+		
+		
+       - So you can think:
+         @FindBys = Find BY + BY
+         It represents a chained/AND-style search.
+
+
+
+===================================================================================	  
+
+04. Very important correction to remember
+	
+	- @FindBy: 		Defines one locator strategy.
+
+		@FindBy(id = "email")
+		WebElement username;
+
+	- @FindBys: 	Defines multiple locator criteria chained together.
+	
+			@FindBys({
+			    @FindBy(tagName = "form"),
+			    @FindBy(id = "email")
+			})
+			WebElement username;
+
+
+===================================================================================	  
+
+
+05. PageFactory.initElements()
+	
+	a. Why do we need it?
+		- Suppose you have this in LoginPage:
+		  
+		  @FindBy(id = "email")
+		  WebElement username;
+		  
+		- At this point you have declared the element
+		
+		- You're basically telling selenium:
+		  "There is an element called username, and its locator is id = "email"
+		
+		- But you haven't initialized the PageFactory filed yet.
+		
+		- This is where this comes in:
+		  PageFactory.initElements(driver, this);
+		  
+		- It tells Selenium:
+		  "Initialize all the @FindBy elements in this page object using this webdriver"
+
+
+
+
+	b. Break the statement into 3 parts
+	   
+	   PageFactory.initElements(driver, this);
+	   
+	   
+	   Part1: PageFactory
+	   			- This is a Selenium Class.
+	   			- It provides functionality for initializing Page Object Fields.
+	   
+	   
+	   Part2: initElements()
+	   			- init means Initialize
+	   			- Elements means our WebElements
+	   
+	   
+	   Part3: driver
+	   			- This is our Selenium WebDriver
+	   			- For Example
+	   			    WebDriver driver = new ChromeDriver();
+	   			- Selenium needs this driver to interact with the browser and locate 
+	   			  elements
+	   
+	   
+	   Part4: this
+	   			- This means: The current page object
+	   			- If you're inside 
+	   				public class LoginPage
+	   			- Then this 
+	   			 	menas: this LoginPage Object
+
+
+
+	c. Where do we normally use it?
+		- In the constructor of the page class
+		
+		- Example
+
+			public class LoginPage extends BaseTest {
+			
+			    @FindBy(id = "email")
+			    WebElement username;
+			
+			    @FindBy(id = "password")
+			    WebElement password;
+			
+			    @FindBy(xpath = "//button[text()='Login']")
+			    WebElement loginButton;
+			
+			
+			    public LoginPage() {
+			        PageFactory.initElements(driver, this);
+			    }
+			}
+
+===================================================================================	  
+
+
+06. SetUp
+
+	In src/main/java
+		- Create a Base layer Package and BaseTest class
+		
+			package base;
+			
+			import java.time.Duration;
+			
+			import org.openqa.selenium.WebDriver;
+			import org.openqa.selenium.chrome.ChromeDriver;
+			import org.openqa.selenium.support.ui.WebDriverWait;
+			
+			public class BaseTest {
+				
+				public static WebDriver driver;
+				
+				public static void initialization()
+				{
+					driver = new ChromeDriver();
+					
+					WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+					
+					driver.get("https://ui.freecrm.com/login?lang=en");
+					
+					driver.manage().window().maximize();
+					
+					
+				}
+			}
+		
+		
+		
+		- Create a pages layer package and LoginPage Class
+		
+			package pages;
+			
+			import org.openqa.selenium.WebElement;
+			import org.openqa.selenium.support.FindBy;
+			import org.openqa.selenium.support.PageFactory;
+			
+			import base.BaseTest;
+			
+			public class LoginPage extends BaseTest {
+					
+			
+				// Locate Object Repository using Page object design pattern with page factory
+				
+				@FindBy(id="email")
+				WebElement username;
+				
+				
+				@FindBy(id ="password")
+				WebElement password;
+				
+				@FindBy(xpath = "//button[@type='submit']")
+				WebElement loginButton;
+				
+				
+				// initialize object reposiotry
+				public LoginPage()
+				{
+					PageFactory.initElements(driver, this);
+				}
+				
+				
+				// Associated method without entering test data 
+				public void enterUsername(String uname)
+				{
+					this.username.sendKeys(uname);
+				}
+				
+				public void enterPassword(String pass)
+				{
+					this.password.sendKeys(pass);
+				}
+				
+				public void clickOnLogin()
+				{
+					this.loginButton.click();
+				}
+			}
+
+		
+	
+	In src/test/java
+		- create tests layer package and LoginPageTest class
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	  

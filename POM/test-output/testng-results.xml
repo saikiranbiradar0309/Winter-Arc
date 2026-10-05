@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="2" passed="2" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2026-10-05T19:12:18 IST" name="Free CRM Application" finished-at="2026-10-05T19:12:30 IST" duration-ms="11823">
+    <groups>
+    </groups>
+    <test started-at="2026-10-05T19:12:18 IST" name="Test" finished-at="2026-10-05T19:12:30 IST" duration-ms="11823">
+      <class name="tests.LoginPageTest">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginPageTest@7c7b252e]" started-at="2026-10-05T19:12:18 IST" name="setUp" finished-at="2026-10-05T19:12:23 IST" duration-ms="4744" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:tests.LoginPageTest@7c7b252e]" started-at="2026-10-05T19:12:23 IST" name="setUp" finished-at="2026-10-05T19:12:26 IST" duration-ms="3068" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="validateLoginFunctionality()[pri:0, instance:tests.LoginPageTest@7c7b252e]" started-at="2026-10-05T19:12:26 IST" name="validateLoginFunctionality" finished-at="2026-10-05T19:12:26 IST" duration-ms="118" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateLoginFunctionality -->
+      </class> <!-- tests.LoginPageTest -->
+      <class name="tests.ContactPageTest">
+        <test-method signature="validateCreateContactFunctionality()[pri:2, instance:tests.ContactPageTest@7b2bbc3]" started-at="2026-10-05T19:12:26 IST" name="validateCreateContactFunctionality" finished-at="2026-10-05T19:12:30 IST" duration-ms="3880" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateCreateContactFunctionality -->
+      </class> <!-- tests.ContactPageTest -->
+    </test> <!-- Test -->
+  </suite> <!-- Free CRM Application -->
+</testng-results>
