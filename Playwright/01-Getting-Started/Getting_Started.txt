@@ -1,0 +1,63 @@
+Getting Started With Playwright
+
+
+01. First Install Playwright Dependencies
+
+    a. Goto Terminal
+
+    b. npm init playwright 
+
+
+========================================================================
+
+
+02. The extension of our test files will be .spec.js            *************
+
+
+========================================================================
+
+
+03. Running Example Test 
+    npm playwright test 
+
+
+========================================================================
+
+
+04. Import the test 
+    import { test, expect } from '@playwright/test';
+
+
+========================================================================
+
+05. What does async mean?
+    - async tells JavaScript:
+        "This function may perform operations that take time, and it can use await"
+    
+
+06. Why do we use await?
+    - Playwright commands often need to wait for something to happen.
+
+    - For example:
+        await page.goto("https://example.com");
+    
+    - JavaScript essentially waits for the goto() operation to complete before moving to the 
+      next line.
+
+    - Then:
+        await page.locator("#username").fill("admin");
+    
+    - Only after the username is filled does it continue.
+
+
+
+========================================================================
+
+
+07. what is browser Context and what it does in playwright?
+    - In Playwright, Browser Context is an isolated browser session inside a browser.
+
+    - The easiest way to understand this:
+        Browser = Chrome application
+        Browser Context = separate browser profile/session inside Chrome
+        Page = a tab inside that session
