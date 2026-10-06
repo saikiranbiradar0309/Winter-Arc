@@ -1,0 +1,110 @@
+Locator
+
+====================================================
+
+01. CSS Selector Locator 
+    - In playwright, a CSS Selector Locator is a way to identify an HTML element using
+      CSS Selector Syntax.
+    
+    - The basic Syntax is:
+        page.locator("CSS_SELECTOR");
+    
+    - For example:
+        await page.locator("#username").fill("saikiran");
+
+        Here:
+            a. page.locator()       --> finds the element
+            b. #username            --> CSS Selector
+            c. .fill()              --> performs the action
+    
+
+
+    a. First Understand HTML 
+        - Suppose your application has
+
+            <input id="username" class="login-input" type="text">
+
+            <input id="password" class="login-input" type="password">
+
+            <button id="loginBtn">Login</button>
+        
+        - You can identify these elements using CSS Selector
+
+
+-------------------------
+
+02. CSS ID Selector (#)
+    - If an element has 
+        <input id="username">
+    
+    - CSS Selector  
+        #username       input#username 
+    
+    - Playwright 
+        page.locator("#username").fill("Saikiran");
+    
+
+    - REMEBER:      # = ID 
+
+
+-------------------------
+
+
+03. CSS Class Selector (.)
+    - If an element has 
+        <input class="username">
+    
+    - CSS Selector
+        .username   or input.username
+    
+    - Playwright
+        page.locator(".username").fill("Sai);
+    
+
+    - REMEBER:          . --> Class 
+
+
+-------------------------
+
+
+04. CSS Tag Selector
+    - You can select an element using its HTML Tag.
+
+    - HTML:
+        <button>Login</button>
+    
+    - CSS: 
+        button 
+    
+    - Playwright
+        page.locator("button").click();
+
+    - But be careful
+
+    - If your page has 
+        <button>Login</button>
+        <button>Cancel</button>
+        <button>Register</button>
+    
+    - Then:
+        page.locator("button")
+
+        Matches all 3 buttons, You may need to narrow it down.
+
+    
+
+-------------------------
+
+
+
+05. CSS Selector Based on any attribute 
+    - HTML:
+        <input id="username" class="login-input" type="text">
+    
+    - Playwright
+        [class='login-input']
+
+
+
+-------------------------
+
