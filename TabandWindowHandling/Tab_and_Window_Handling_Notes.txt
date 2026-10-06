@@ -1,0 +1,262 @@
+01. What are multiple windows/tabs in selenium?
+	- Suppose your application opens a new tab
+
+		Browser
+		│
+		├── Tab 1 → Main Application
+		│
+		└── Tab 2 → Payment / Help / External Website
+	
+	
+	- Or
+
+		Main Window
+		     │
+		     ├── Child Window 1
+		     ├── Child Window 2
+		     └── Child Window 3
+	
+	
+	- Selenium treats each browser tab/window as a window context.
+	
+	- To switch between them use
+	 	driver.switchTo().window(windowHandle);
+
+	 	
+	
+=========================================================================
+
+
+02. The most important concept: Window Handle
+	- Every browser window/tab has a unique identifier called a window handle
+	
+	- You can get the current window's handle using:
+		String parentWindow = driver.getWindowHandle();
+	
+	- It may look like
+		CDwindow-8A2F1B3C...
+	
+	- You normally dont care about the actual value
+	
+	- Think of it as:
+
+			Parent Tab
+			     ↓
+			"ABC123"
+			
+			Child Tab
+			     ↓
+			"XYZ789"
+	
+	- Selenium uses these IDs to switch between them.
+
+=========================================================================
+
+
+03. getWindowHandle() vs getWindowHandles()						**************
+	
+	a. getWindowHandle()		Demo1.java
+		- Returns the handle of the currently active window
+			String parentWindow = driver.getWindowHandle();
+		
+		- Only one:
+			ABC123
+	
+	
+	b. getWindowHandles()				Demo2.java
+		- Returns handles of all currently open windows/tabs
+			Set<String> allWindows = driver.getWindowHandles();
+			
+		- Example:
+			[
+			   ABC123,
+			   XYZ789,
+			   PQR456
+			]
+		
+		- Because there can be multiple handles, the return type is:
+			Set<String>
+	
+	
+	- Remember
+		getWindowHandle()
+		        ↓
+		ONE
+		
+		getWindowHandles()
+		        ↓
+		ALL
+
+
+=========================================================================
+
+
+04. Why Set<String>?
+	- You might wonder:
+		Why does Selenium returns a Set?
+	
+	- Because window handles needs to be unique
+		Set<String> allWindows = driver.getWindowHandles();
+	
+	- A Set doesnt allow duplicate values.
+	
+
+=========================================================================
+
+
+05. Professional approach: identify window by title			Wikipedia_Multiple_Windows.java
+	- Suppose you have:
+		Parent 		--> Amazon
+		Child		--> Payment Gateway
+	
+	- Instead of assuming
+		Second Window = Payment
+	
+	- do this:
+		
+		for (String window: driver.getWindowHandles()) 
+		{
+			driver.switchTo().window(window);
+			
+			if (driver.getTitle().contains("Payment")) 
+			{
+				break;
+			}
+		}
+
+
+=========================================================================
+
+
+06. Identify Window by URL			Window_Handle_By_URL.java
+	- You can also use
+		driver.getCurrentUrl();
+	
+	- Example
+		for(String window: driver.getWindowHandles())
+		{
+			driver.switchTo().window(window);
+			
+			if(driver.getCurrentUrl().contains("payment"))
+			{
+				break;
+			}
+		}
+
+
+=========================================================================
+
+07. Identify window by page element
+	- This is even more useful in real projects
+	
+	- Suppose the child page contains
+		<h1> Payment Details </h1>
+	
+	
+	- You can do:
+		for(String window: driver.getWindowHandles())
+		{
+			driver.switchTo().window(window);
+			
+			if (driver.findElement(By.xpath("//h1[text()='Payment Details']")
+			{
+				break;
+			}
+		}
+
+
+=========================================================================
+
+
+08. Modern Selenium: Creating new TAB			creatingNewTab.java
+	- Selenium 4 Provides
+		driver.switchTo().newWindow(WindowType.TAB);
+		
+	- Example:
+		driver.get("https://www.google.com");
+		driver.switchTo().newWindow(WindowType.TAB);
+		driver.get("https://www.facebook.com");
+	
+	- Now:
+		Tab 1 → Google
+		Tab 2 → Facebook
+
+
+=========================================================================
+
+
+09. Creating a New Browser Window			creatingNewWindow.java
+	- Selenium 4 also supports
+		driver.switchTo().newWindow(WindowType.WINDOW);
+		
+	- Example
+		driver.get("https://www.facebook.com");
+		driver.switchTo.newWindow(WindowType.WINDOW);
+		driver.get("https://www.amazon.in");
+
+	- So:
+		WindowType.TAB
+			- Means: New browser TAB
+		
+		WindowType.WINDOW
+			- Means: New Browser Window
+
+=========================================================================
+
+
+10. Important distinction: tab vs window
+	- From Selenium's perspective, both are handled through window handles.
+	
+	- You generally use:
+		driver.switchTo().window(handle);
+	
+	- for either.
+	
+	- So dont think
+		TAB → one Selenium mechanism
+		WINDOW → completely different Selenium mechanism
+	
+	- Instead:
+
+		Browser Tab
+		     ↓
+		Window Handle
+		
+		Browser Window
+		     ↓
+		Window Handle
+
+
+=========================================================================
+
+
+11. Opening a new tab and remembering its handle
+	- A Professional approach is to capture the handle after creating a 
+	  new tab.
+	  
+		  driver.switchTo.newWindow(WindowType.TAB);
+		  String newTab = driver.getWindowHandle();
+		  driver.get("https://www.google.com");
+	 
+	- Then later:
+		driver.switchTo().window(newTab);
+	
+	- Very clean
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
