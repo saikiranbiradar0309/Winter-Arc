@@ -1,0 +1,66 @@
+01. What are Variables in JavaScript?
+    - A Variable is a named container used to store a value in a memory, so we can use or change
+      that value later in our program.
+    
+    - For example:
+        let name = "Saikiran";
+        let age = 28;
+    
+    - Here:
+        name            --> Variable
+        Saikiran        --> value 
+        age             --> variable 
+        28              --> value 
+    
+    - let and const were introduced in ES6, officially called ECMAScript 2015.
+
+
+===============================================================
+
+
+02. Types of Variable Declarations in JavaScript
+
+    a. var 
+        - var is the old way of declaring variables 
+        
+        - Example: 
+            var name = "Saikiran";
+            console.log(name);
+
+            name = "Rahul";
+            console.log(name);
+        
+        - var allows you to reassign the value.
+    
+
+
+    b. let 
+        - let is a modern way to declare a variable when its value may change.
+
+        - Example:
+            let age = 28;
+            console.log(age);
+
+            age = 29;
+            console.log(age);
+        
+        - So remember: let value can change 
+    
+
+
+    c. const 
+        - const is used when you dont want to reassign the variable
+
+        - Example: 
+            const country = "INDIA";
+            console,log(country);
+
+            country = "UAE";
+            console.log(country);       // Throws error
+        
+        - Reassigning is not allowed in const 
+
+        - We will get TypeError 
+
+        - So remember:
+            const = value cannot be reassigned.

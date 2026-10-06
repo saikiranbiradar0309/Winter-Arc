@@ -1,0 +1,9 @@
+typeof 
+
+- In JavaScript, the easiest way to understand what datatype a value is, is to use the 
+  typeof operator.
+
+- typeof: The easiest way 
+
+    let name = "Saikiran";
+    console.log(typeof name);
