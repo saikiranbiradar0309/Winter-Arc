@@ -1,0 +1,23 @@
+JavaScript Data Types
+
+- A Data Type tells JavaScript what kind of value a variable is holding.
+
+- For Example:
+    let name = "Saikiran";
+    let age = 28;
+    let is_Working = true;
+
+- Here 
+    name        --> String 
+    age         --> Number 
+    is_Working  --> Boolean
+
+- JavaScript data types are broadly divided into 2 categories:
+
+        JavaScript Data Types
+        │
+        ├── 1. Primitive Data Types
+        │
+        └── 2. Non-Primitive Data Types
+
+

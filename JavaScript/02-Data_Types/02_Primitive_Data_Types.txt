@@ -1,0 +1,181 @@
+Primitive Data Types 
+
+01. String 
+    - A String is used to store text.
+    
+    - Example:
+        let name = "Saikiran";
+        let city = "Bengaluru";
+    
+    - You can use 
+        "Hello"
+        'Hello'
+        `Hello`
+    
+
+    - Example:
+        let username = "Saikiran";
+        console.log(username);
+        console.log(typeof username);
+
+        Output: 
+            Saikiran 
+            string 
+    
+    - Remeber:
+        String = Text 
+
+
+
+==============================================================
+
+
+02. Numbers
+    - Used for Numbers.
+
+    - Example:
+        let age = 28;
+        let salary = 120000;
+        let percentage = 98.9;
+    
+
+    - JavaScript used Number for both "Integers and Decimal" Numbers.
+
+    - Example:
+        let a = 28;
+        let b = 10.5;
+
+        console.log(typeof a);      // number 
+        console.log(typeof b);      // number 
+    
+
+    - Unlike Java, JavaScript doesn't normally distinguish between:
+        int 
+        float 
+        double 
+    
+    - They are all Numbers.
+
+    - Remeber:
+        Number = Numeric Value 
+
+
+==============================================================
+
+
+03. Boolean
+    - Boolean has only 2 values. 
+    
+    - true or false 
+
+    - Example:
+        let isLoggedIn = true;
+        let isAdmin    = false;
+
+        console.log(isLoggedIn);
+        console.log(typeof isLoggedIn);
+
+
+        console.log(isAdmin);
+        console.log(typeof isAdmin);
+    
+    
+    - Remeber:
+        Boolean = true/false 
+
+
+==============================================================
+
+
+04. Undefined
+    - A Variable is undefined when it has been declared but hasn't been assigned a value.
+
+    - Example:
+        let username;
+
+        console.log(username);
+    
+    - Output:
+        undefined
+    
+
+    - Another Example:
+        let value;
+
+        console.log(typeof value);
+    
+
+    - Think:
+        Variable exists, but no value has been assigned.
+        
+
+==============================================================
+
+
+05. Null 
+    - Null represents an intentional absence of a value.
+    
+    - Example:
+        let user = null;
+    
+    - You're Basically saying:
+        "Currently, this variable has no value"
+    
+    - Example:
+        let selectedUser = null;
+
+        Later 
+
+        selectedUser = "Saikiran";
+    
+
+    - IMPORTANT JAVASCRIPT INTERVIEW POINT 
+        console.log(typeof selectedUser);
+
+        Returns:
+            Object
+    
+
+    - This is a historical JavaScript quirk
+
+    - Don't think that null is conceptually an Object. It represents an intentional absence of a value.
+
+
+
+==============================================================
+
+
+06. BigInt 
+    - BigInt is used for very large integers that cannot be safely represented by the normal Number type.
+
+    - Example:
+        let bigNumber = 123456789012345678901234567890n;
+        console.log(typeof bigNumber);
+    
+    - Notice the 
+        n 
+        at the end 
+    
+    - For normal automation work, you won't use BigInt very often.
+    
+
+==============================================================
+
+
+07. Symbol 
+    - Symbol creates a unique value 
+
+    - Example:
+        let id = Symbol("id");
+
+    
+    - Another Symbol with the same description is still different:
+        let id1 = Symbol("id");
+        let id2 = Symbol("id");
+
+        console.log(id1 === id2);
+    
+    - Output:
+        false 
+    
+    - Symbol is mainly useful when you need unique identifiers, especially in more advanced JavaScript.
