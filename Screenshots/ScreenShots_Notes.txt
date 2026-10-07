@@ -1,0 +1,187 @@
+01. What is a Selenium screenshot?
+	- A Screenshot captures the current browser state during test execution.
+	
+	- Typical use cases:
+
+			Test execution
+			     ↓
+			Something happens
+			     ↓
+			Take screenshot
+			     ↓
+			Save screenshot
+			     ↓
+			Attach to report
+	
+	
+	- Screenshots are usually helpful when a test fails.
+	
+	- For example:
+
+		Test: Login
+		Expected: Dashboard
+		Actual: Error message
+		             ↓
+		       Screenshot
+		             ↓
+		     Debug the failure
+
+		     
+		     
+=========================================================================================
+
+
+02. Selenium TakesScreenshot
+	 
+	- Selenium provides the:
+		TakesScreenshot
+		interface
+
+	- You typically use:
+		TakesScreenshot screenShot = (TakesScreenshot) driver;
+
+	
+	- Then:
+		screenShot.getScreenshotAs();
+
+
+
+=========================================================================================
+
+
+03. Basic Screenshot code				*************
+
+	- The most important code to memorize is:
+		File source = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+	
+	
+	- Then save it
+		File destination = new File("screenshots/homepage.png");
+		
+		Files.copy(source.toPath(), destination.toPath());
+	
+	
+
+=========================================================================================
+
+
+04. Understand OutputType										*************
+	
+	- This is important
+	
+	- Selenium supports different output types.
+
+
+
+	a. OutputType.FILE
+		- getScreenshotAs(OutputType.FILE);
+		
+		- Returns a temporary screenshot file.
+		
+		- You can then copy it wherever you want.
+	
+	
+	
+	b. OutputType.BYTES
+		- getScreenshotAs(OutputTpe.BYTES);
+		
+		- byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+		
+		- This is particularly useful when you're attaching screenshots to reporting systems.
+		
+		- For example, an Allure/Extent-style reporting integration may work with bytes.
+
+
+	
+	c. OutputType.BASE64
+		- String screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
+		
+		- Useful when a reporting framework expects a Base64 representation.
+
+
+
+=========================================================================================
+
+
+05. Element Screenshot				***********************
+
+	- This is another important Selenium capability
+	
+	- You dont always need a screenshot of the entire browser.
+	
+	- You can capture a specific element.
+	
+	- Example:
+		WebElement loginButton = driver.findElement(By.id("login"));
+		
+		File screenshot = loginButton.getScreenshotAs(OutputType.FILE);
+	
+	- This captures only the element.
+	
+	- Conceptually:
+
+			Browser
+			┌──────────────────────────────┐
+			│                              │
+			│ Username                     │
+			│ Password                     │
+			│                              │
+			│       ┌──────────────┐       │
+			│       │    LOGIN     │       │
+			│       └──────────────┘       │
+			│                              │
+			└──────────────────────────────┘
+			              ↑
+			        Element screenshot
+			        
+	- This can be useful for debugging a specific component.
+
+
+
+
+=========================================================================================
+
+
+06. Full Page Screenshots
+
+	- For browsers that support full-page screenshots, Selenium provides:
+	
+		File screenshot = ((HasFullPageScreenshot) driver).getFullPageScreenshotAs(OutputType.FILE);
+	
+	
+	- Conceptually:
+
+			Normal screenshot:
+			
+			┌───────────────┐
+			│ Visible area  │
+			│               │
+			│               │
+			└───────────────┘
+			
+			Full-page:
+			
+			┌───────────────┐
+			│ Page top      │
+			│               │
+			│               │
+			│               │
+			│               │
+			│ Page bottom   │
+			└───────────────┘
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		     
