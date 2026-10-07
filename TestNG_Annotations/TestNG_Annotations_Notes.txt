@@ -1,0 +1,211 @@
+01. What are Annotations in TestNG?
+	- In TestNG, annotations are special keywords that start with @ and tell TestNG what a 
+	  particular method/class is supposed to do and when it should execute.
+	 
+	
+	- For Example:
+		@Test
+		public void loginTest()
+		{
+			System.out.println("Login test");
+		}
+	
+	- Here:
+		@Test
+			- is a TestNG annotation
+	
+	
+	- It tells TestNG:
+		"This method is a test method. Execute it as a part of the test"
+
+		
+		
+===================================================================================
+
+
+02. Why do we need Annotations?
+	
+	- Without annotations, TestNG wouldn't know
+		a. Which method is a test
+		b. Which method should execute before the test
+		c. Which method should execute after the test
+		d. Which method should execute before all tests
+		e. Which method should execute after all tests
+		f. Whether a test depends on another test
+		g. Whether a test should be skipped
+		h. What priority a test should have
+	
+	
+	- Annotations basically give instructions to the TestNG framework.
+		
+
+===================================================================================
+
+
+03. Most important TestNG annotations
+	
+	a. @Test
+			- Defines a test method
+	
+	
+	b. @BeforeMethod
+			- Runs before every @Test method
+	
+	
+	c. @AfterMethod
+			- Runs after every @Test method
+	
+	
+	d. @BeforeClass
+			- Runs once before the first test method in the class
+	
+	
+	e. @AfterClass
+			- Runs once after all test methods in a class
+	
+	
+	f. @BeforeTest
+			- Runs before the <test> section in TestNG XML
+	
+	
+	g. @AfterTest
+			- Runs after the <test> section
+	
+	
+	h. @BeforeSuite
+			- Runs once before the entire suite
+	
+	
+	i. @AfterSuite
+			- Runs once after the entire suite
+			
+
+=================================================================================== 
+		
+04. Scenario Test case 1			AnnotationsDemo1.java
+	
+	- Requirement
+		a. Login				--> @BeforeMethod
+		b. Search				--> @Test
+		c. Logout				--> @AfterMethod
+		d. Login
+		e. Advanced Search
+		f. Logout
+		
+	- SO Here
+		a. We dont need to create methods for login search logout and login adv search and logout
+		
+		b. Here we create
+			Login using 								@BeforeMethod
+			Logout Using 								@AfterMethod
+			and Search and Advanced Searc using 		@Test
+		
+		c. SO no need to create login and logout method 2 times, 
+			Create it once and use it anywhere in the code.
+		
+		
+		d. And Its not like first we need to create login then Search and Advanced Search
+		   and in the end Logout no its not like that, You can create anywhere in the class
+		   and access it using annotations
+		   
+		   
+		e. And @BeforeMethod and @AfterMethod cannot be visible in Test results
+		   But in the console window it is visible just only we added print statement
+
+		   
+=================================================================================== 
+
+
+
+05. Scenario Test case 2							AnnotationsDemo2.java
+	
+	- Requirement
+		a. Login							--> @BeforeClass
+		b. Search							--> @Test
+		c. Advanced Search					--> @Test
+		d. Logout							--> @AfterClass
+
+	- So Here:
+		a. Before Execution of all the tests (Search and Advanced Search) Login
+		   Test should Execute First.
+		
+		b. After Execution of all the tests (Search and Advanced Search) Logout
+		   Test should Execute. 
+		
+		c. And @BeforeClass and @AfterClass cannot be visible in Test results
+		   But in the console window it is visible just only we added print statement
+
+
+
+=================================================================================== 
+
+
+06. Scenario Test Case 3 
+	
+	- Requirement
+		a. login				@BeforeTest
+		b. search				@Test
+		c. AdvancedSearch		@Test
+		d. Logout				@AfterTest
+	
+	
+	- We create a package and inside that lets create 2 classes
+	
+	- And after creating click on our package --> TestNG --> Convert To TestNG
+	
+	- So it will create an XML File						testing.xml
+	
+	- Inside that at first everything will be defined we just need to run that.
+	
+	- If you want to separate classes u can do like below
+
+		
+		  <test thread-count="5" name="Test1">
+		    <classes>
+		      <class name="BeforeAfterTest.Demo1"/>
+		    </classes>
+		  </test>
+		  
+		  
+		    <test thread-count="5" name="Test2"> 
+		    <classes>
+		      <class name="BeforeAfterTest.Demo2"/>
+		    </classes>
+		  </test> 
+	
+	- The output will be something like this
+	
+			This is Before Test
+			This is abc from Demo1
+			This is PQR from Demo2
+			This is After Test
+	
+	
+	- But if you specify your test case like this
+	
+		  <test thread-count="5" name="Test1">
+		    <classes>
+		      <class name="BeforeAfterTest.Demo1"/>
+		      <class name="BeforeAfterTest.Demo2"/>
+		    </classes>
+		  </test>
+		  
+		  
+		    <test thread-count="5" name="Test2"> 
+		    <classes>
+		      <class name="BeforeAfterTest.Demo1"/>
+		      <class name="BeforeAfterTest.Demo2"/>
+		    </classes>
+		  </test> 
+	
+	
+	- The output will be something like this
+	
+		This is Before Test
+		This is abc from Demo1
+		This is PQR from Demo2
+		This is After Test
+		This is Before Test
+		This is abc from Demo1
+		This is PQR from Demo2
+		This is After Test

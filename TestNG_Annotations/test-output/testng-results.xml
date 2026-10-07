@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="6" passed="6" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2026-10-07T14:53:12 IST" name="Suite" finished-at="2026-10-07T14:53:12 IST" duration-ms="39">
+    <groups>
+    </groups>
+    <test started-at="2026-10-07T14:53:12 IST" name="Test1" finished-at="2026-10-07T14:53:12 IST" duration-ms="11">
+      <class name="BeforeAfterTest.Demo1">
+        <test-method is-config="true" signature="mno()[pri:0, instance:BeforeAfterTest.Demo1@459e9125]" started-at="2026-10-07T14:53:12 IST" name="mno" finished-at="2026-10-07T14:53:12 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- mno -->
+        <test-method signature="abc()[pri:0, instance:BeforeAfterTest.Demo1@459e9125]" started-at="2026-10-07T14:53:12 IST" name="abc" finished-at="2026-10-07T14:53:12 IST" duration-ms="2" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- abc -->
+      </class> <!-- BeforeAfterTest.Demo1 -->
+      <class name="BeforeAfterTest.Demo3">
+        <test-method signature="test()[pri:0, instance:BeforeAfterTest.Demo3@47eaca72]" started-at="2026-10-07T14:53:12 IST" name="test" finished-at="2026-10-07T14:53:12 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test -->
+      </class> <!-- BeforeAfterTest.Demo3 -->
+      <class name="BeforeAfterTest.Demo2">
+        <test-method signature="pqr()[pri:0, instance:BeforeAfterTest.Demo2@4c583ecf]" started-at="2026-10-07T14:53:12 IST" name="pqr" finished-at="2026-10-07T14:53:12 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- pqr -->
+        <test-method is-config="true" signature="xyz()[pri:0, instance:BeforeAfterTest.Demo2@4c583ecf]" started-at="2026-10-07T14:53:12 IST" name="xyz" finished-at="2026-10-07T14:53:12 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- xyz -->
+      </class> <!-- BeforeAfterTest.Demo2 -->
+    </test> <!-- Test1 -->
+    <test started-at="2026-10-07T14:53:12 IST" name="Test2" finished-at="2026-10-07T14:53:12 IST" duration-ms="4">
+      <class name="BeforeAfterTest.Demo1">
+        <test-method is-config="true" signature="mno()[pri:0, instance:BeforeAfterTest.Demo1@44c03695]" started-at="2026-10-07T14:53:12 IST" name="mno" finished-at="2026-10-07T14:53:12 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- mno -->
+        <test-method signature="abc()[pri:0, instance:BeforeAfterTest.Demo1@44c03695]" started-at="2026-10-07T14:53:12 IST" name="abc" finished-at="2026-10-07T14:53:12 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- abc -->
+      </class> <!-- BeforeAfterTest.Demo1 -->
+      <class name="BeforeAfterTest.Demo3">
+        <test-method is-config="true" signature="before()[pri:0, instance:BeforeAfterTest.Demo3@dd05255]" started-at="2026-10-07T14:53:12 IST" name="before" finished-at="2026-10-07T14:53:12 IST" duration-ms="3" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- before -->
+        <test-method signature="test()[pri:0, instance:BeforeAfterTest.Demo3@dd05255]" started-at="2026-10-07T14:53:12 IST" name="test" finished-at="2026-10-07T14:53:12 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test -->
+        <test-method is-config="true" signature="after()[pri:0, instance:BeforeAfterTest.Demo3@dd05255]" started-at="2026-10-07T14:53:12 IST" name="after" finished-at="2026-10-07T14:53:12 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- after -->
+      </class> <!-- BeforeAfterTest.Demo3 -->
+      <class name="BeforeAfterTest.Demo2">
+        <test-method signature="pqr()[pri:0, instance:BeforeAfterTest.Demo2@7e6f74c]" started-at="2026-10-07T14:53:12 IST" name="pqr" finished-at="2026-10-07T14:53:12 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- pqr -->
+        <test-method is-config="true" signature="xyz()[pri:0, instance:BeforeAfterTest.Demo2@7e6f74c]" started-at="2026-10-07T14:53:12 IST" name="xyz" finished-at="2026-10-07T14:53:12 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- xyz -->
+      </class> <!-- BeforeAfterTest.Demo2 -->
+    </test> <!-- Test2 -->
+  </suite> <!-- Suite -->
+</testng-results>
