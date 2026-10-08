@@ -1,0 +1,358 @@
+01. What are Assertions in TestNG?
+	- An Assertion is a validation or Check that we use to identify whether the actual result
+	  of a test matches the expected result.
+	 
+	- In simple words
+		"Assertion = Did the application behave as I expected"
+	
+	- For example:
+		Suppose you automate a login page.
+		
+		You enter:
+			Username: 	admin
+			Password: 	password123
+			
+		
+		After Clicking login, you expect:
+			Dashboard page should be displayed
+		
+		
+	- Your selenium code performs the action:
+		driver.findElement(By.id("login")).click();
+		
+		
+	- But Selenium clicking the button doesn't tell you whether login actually succeeded.
+	
+	
+	- Thats where Assertion comes in
+		Assert.assertEquals(driver.getTitle(), "Dashboard");
+	
+	
+	- Now TestNG Checks
+
+			Expected: Dashboard
+			Actual:   Dashboard
+			
+			        ↓
+			
+			       PASS
+	
+	
+	- If the Actual title 
+		Login Page
+	
+	
+	- Then:
+
+		Expected: Dashboard
+		Actual:   Login Page
+		
+		        ↓
+		
+		       FAIL
+
+		       
+===============================================================================
+
+02. Lets understand with an Example		***************
+	
+	- Refer to the code Demo1.java
+	
+	
+	a. What our if-else is doing
+		- You are manually comparing
+			exp_title.equals(act_title)
+		
+		
+		- If they match
+
+				Expected = Opencart
+				Actual   = Opencart
+				
+				       ↓
+				
+				if condition = true
+				
+				       ↓
+				
+				"Test case passed"
+
+
+		 - If they dont match
+
+				Expected = Opencart
+				Actual   = Amazon
+				
+				       ↓
+				
+				if condition = false
+				
+				       ↓
+				
+				"Test case failed"
+
+
+		 - So logically, your code is checking the result correctly.
+		 
+		 - But the problem is that TestNG does not know that your test has failed.
+		 
+		 - That's the key point.
+
+
+
+----------
+	
+	b. What happens if you use if-else?
+		
+		- Lets change our code:
+
+				String exp_title = "Opencart";
+				String act_title = "Amazon";
+				
+				if (exp_title.equals(act_title)) {
+				    System.out.println("Test case passed");
+				}
+				else {
+				    System.out.println("Test case failed");
+				}
+
+		
+		- Console:
+			Test case failed
+		
+		
+		- But TestNG may show:
+
+				Tests run: 1
+				Failures: 0
+				Errors: 0
+
+		
+		- Why?
+			Because from TestNG's Perspective
+				"The Java method executed successfully. I didn't receive any failure signal."
+			
+			
+			Your else is just a normal Java statement.
+			
+			TestNG doesn't interpret:
+				System.out.println("Test case failed");
+				
+				as:
+					"Mark this test as FAILED."
+
+
+		
+		- That's the biggest reason we use assertions.
+
+
+===============================================================================
+
+
+03. Why do we need assertions?
+	
+	- The main reason is:
+			"To validate the application behavior."
+	
+	
+	- Without Assertions:
+
+			@Test
+			public void loginTest() {
+			
+			    driver.findElement(By.id("username")).sendKeys("admin");
+			
+			    driver.findElement(By.id("password")).sendKeys("password");
+			
+			    driver.findElement(By.id("login")).click();
+			}
+
+
+	- The test may execute all these steps successfully.
+	
+	- But did login actually work?
+	
+	- We dont know.
+	
+	- With Assertions
+
+				@Test
+				public void loginTest() {
+				
+				    driver.findElement(By.id("username")).sendKeys("admin");
+				
+				    driver.findElement(By.id("password")).sendKeys("password");
+				
+				    driver.findElement(By.id("login")).click();
+				
+				    Assert.assertEquals(
+				        driver.getTitle(),
+				        "Dashboard"
+				    );
+				}
+
+	
+	- Now we're actually validating the expected behavior.
+
+
+===============================================================================
+
+
+04. Now use TestNG Assertion								Demo2.java
+	
+	- Instead of:
+		if(exp_title.equals(act_title))
+	
+	- Use:
+		Assert.assertEquals(act_title, exp_title);
+
+
+===============================================================================
+
+
+05. What happens when the title is wrong?
+	
+	- Change
+		
+		String exp_title = "Opencart";
+		String act_title = "Amazon";
+	
+	
+	- Then:
+		Assert.assertEquals(exp_title, act_title);
+		
+		Fails
+	
+	
+	- TestNG Receives an AssertionError.
+
+
+===============================================================================
+
+
+06. Assertion Types
+	
+	a. Hard Assertion
+		
+		- Hard Assertions use the Assert class:
+			import org.testng.Assert
+		
+		- Example:
+			Assert.assertEquals(actual, expected);
+			
+			If this assertion fails, the current test method stops executing immediately.
+		
+		
+		- When to Use?
+			Use Hard Assertions when the validation is critical.
+			
+			For Example:
+				
+				Login successful?
+				      ↓
+				NO
+				      ↓
+				Don't continue checkout test
+
+			If login fails there is no point continuing with checkout.
+
+
+
+
+	
+	b. Soft Assertions
+		
+		- Soft Assertions use:
+			SoftAssert
+		
+		- Example:
+			SoftAssert softAssert = new SoftAssert();
+			
+		
+		- IMPORTANT
+			Compulsory we need to use .assertAll() at the end
+			
+			Example: softAssert.assertAll
+
+
+===============================================================================
+
+
+07. Assertion Methods
+	
+	a. assertEquals()
+		
+		- Checks whether 2 values are equal or not.
+			Assert.assertEquals(actual, expected);
+		
+		- Example:
+			String expected = "Sai kiran";
+			String actual = "Saikiran";
+			
+			Assert.assertEquals(expected, actual);
+		
+		- Useful for:
+			Title
+			URL
+			Text
+			Username
+			Expected API Response
+
+	
+	
+	b. assertNotEquals()
+		
+		- Checks that 2 values are not equal
+			Assert.assertNotEquals(actual, expected);
+		
+		- Example:
+			Assert.assertNotEquals(driver.getTitle(), "Login Page");
+
+
+
+	c. assertTrue()
+		
+		- Checks whether a condition is true.
+			Assert.assertTrue(condition);
+		
+		- Selenium Example:
+			Assert.assertTrue(loginButton.isDisplayed());
+			
+			Meaning: "Login Button should be displayed"
+
+
+	d. assertFalse()
+	
+		- Checks whether a condition is false.
+			Assert.assertFalse(condition);
+			
+		- Example:
+			Assert.assertFalse(errorMessage.isDisplayed())
+			
+		- Meaning: Error message should NOT be displayed.
+
+	
+	e. assertNull()
+	
+		- Checks whether a value is null.
+			Assert.assertNull();
+		
+		- Example:
+			String value = null;
+			Assert.assertNull(value);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		     
