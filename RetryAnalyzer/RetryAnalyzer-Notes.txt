@@ -1,0 +1,165 @@
+01. What is Retry Analyzer in TestNG?
+	
+	- Retry Analyzer is a TesNG mechanism that allows us to automatically re-run failed test 
+	  case a specified number of times.
+	  
+	- In simple words:
+		If a test fails, Retry Analyzer asks: "Should I run this test again"
+	
+	- For example:
+
+			Test executes
+			     ↓
+			   FAIL
+			     ↓
+			Retry Analyzer
+			     ↓
+			Retry?
+			  ┌──┴──┐
+			 YES    NO
+			  ↓      ↓
+			Run     Final
+			again   FAILED	
+	
+	
+====================================================================
+
+
+02. Why do we need Retry Analyzer?
+	
+	- In Selenium Automation, sometimes a test can fail because of a temporary/transient problem
+	  not because the application is actually broken.
+	  
+	
+	- For Example:
+		a. Temporary Network Issue
+		b. Browser temporarily becomes unresponsive
+		c. Application takes longer than expected
+		d. Selenium timing issue
+		e. Temporary StaleElementReferenceException
+		f. Temporary environment/infrastructure issue
+		g. Remote Selenium Grid Instability
+
+
+====================================================================
+
+
+03. AN IMPORTANT WARNING
+	
+	- Retry Analyzer should not be used to hide genuine application defects.
+	
+	- For Example:
+		Expected: 	100₹
+		Actual:		200₹
+	
+	- If the test fails because of a genuine application bug, retrying 3 times doesn't 
+	  fix anything
+	  
+			Attempt 1 → FAIL
+			Attempt 2 → FAIL
+			Attempt 3 → FAIL  
+	
+	- So retry is best suited for known transient/flaky failures, not as a substitue for 
+	  fixing unstable tests.
+	  
+	  
+====================================================================
+
+
+04. Steps to Implement Retry Logic
+		
+	Step1: Create a Retry Analyzer Class
+
+		- Create:
+				RetryAnalyzer.java
+		
+		- Then:
+
+				import org.testng.IRetryAnalyzer;
+				import org.testng.ITestResult;
+				
+				
+				public class RetryAnalyzer implements IRetryAnalyzer
+				{
+					int count = 0;
+					int maxRetryCount = 2;
+					
+					@override
+					public boolean retry(ITestResult result) 
+					{
+						if(count < maxRetryCount) 
+						{
+							count++;
+							
+							return true;
+						}
+						
+						return false;
+					}
+				}	  
+
+
+
+	
+	Step2: Implement IRetryAnalyzer
+		
+		- public class RetryAnalyzer implements IRetryAnalyzer
+			
+			IRetryAnalyzer is a TestNG interface.
+		
+			It provides:
+				retry()
+			
+			method:
+				@override
+				public boolean retry(ITestResult result)
+				{
+				
+				}
+		
+		- TestNG calls this method when a test fails to determine whether the test should be 
+		  executed again.
+
+	
+	
+	
+	Step 3: Understand retry() method
+		
+		- our code:
+				@Override
+				public boolean retry(ITestResult result) {
+				
+				    if (count < maxRetryCount) {
+				
+				        count++;
+				
+				        return true;
+				    }
+				
+				    return false;
+				}
+		
+		- The important part is:
+			return true;
+			
+		  Means: 
+		  	Retry the test
+		
+		  And:
+		  	return false;
+		  	
+		  Means: Dont retry, Keep the test as failed.
+
+
+
+
+	Step 4: Attach Retry Analyzer to the test
+		
+		- Now we tell TestNG:
+				"Use this RetryAnalyzer for this test"
+		
+		
+		- We can do this using
+			
+			@Test(retryAnalyzer = RetryAnalyzer.class)
+
